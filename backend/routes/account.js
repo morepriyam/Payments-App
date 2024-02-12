@@ -1,6 +1,7 @@
 const express = require("express");
 const { authMiddleware } = require("../middleware");
 const { Account } = require("../db");
+const zod = require("zod");
 const router = express.Router();
 const mongoose = require("mongoose");
 
@@ -18,9 +19,17 @@ router.get("/balance", authMiddleware, async (req, res) => {
   }
 });
 
+const transferSchema = zod.object({
+  to: zod.string(),
+  amount: zod.number(),
+});
 router.post("/transfer", authMiddleware, async (req, res) => {
   let session;
   try {
+    schemaCheck = transferSchema.safeParse(req.body);
+    if (schemaCheck.error) {
+      return res.status(400).json({ message: "Incorrect inputs" });
+    }
     session = await mongoose.startSession();
 
     session.startTransaction();
@@ -60,7 +69,6 @@ router.post("/transfer", authMiddleware, async (req, res) => {
       message: "Transfer successful",
     });
   } catch (error) {
-    console.log(error);
     if (session) {
       await session.abortTransaction();
     }

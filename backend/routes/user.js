@@ -135,54 +135,78 @@ const updateUserSchema = zod.object({
 });
 
 router.put("/", authMiddleware, async (req, res) => {
-  const success = updateUserSchema.safeParse(req.body);
-  if (success.error) {
-    res.status(411).json({
-      message: "Error while updating information / Wrong Inputs",
+  try {
+    const success = updateUserSchema.safeParse(req.body);
+    if (success.error) {
+      res.status(411).json({
+        message: "Error while updating information / Wrong Inputs",
+      });
+    }
+    await User.updateOne(req.body, {
+      _id: req.userId,
     });
+    res.json({
+      message: "Updated successfully",
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
   }
-  await User.updateOne(req.body, {
-    _id: req.userId,
-  });
-  res.json({
-    message: "Updated successfully",
-  });
 });
 
-router.get("/bulk", async (req, res) => {
-  const filter = req.query.filter || "";
-  const users = await User.find({
-    $or: [
-      {
-        firstName: {
-          $regex: filter,
+const filterSchema = zod.string();
+
+router.get("/bulk", authMiddleware, async (req, res) => {
+  try {
+    const filter = req.query.filter || "";
+    isString = filterSchema.safeParse(filter);
+    if (isString.error) {
+      res.status(411).json({
+        message: "Wrong Inputs",
+      });
+    }
+    const users = await User.find({
+      $or: [
+        {
+          firstName: {
+            $regex: filter,
+          },
         },
-      },
-      {
-        lastName: {
-          $regex: filter,
+        {
+          lastName: {
+            $regex: filter,
+          },
         },
-      },
-      {
-        username: {
-          $regex: filter,
+        {
+          username: {
+            $regex: filter,
+          },
         },
-      },
-    ],
-  });
-  res.json({
-    user: users.map((user) => ({
-      username: user.username,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      imageURL: user.imageURL,
-      _id: user._id,
-    })),
-  });
+      ],
+    });
+    res.json({
+      user: users.map((user) => ({
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        imageURL: user.imageURL,
+        _id: user._id,
+      })),
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
 });
+
+const usernameSchema = zod.string();
 
 router.post("/addfriend", authMiddleware, async (req, res) => {
   try {
+    const isString = usernameSchema.safeParse(req.body.username);
+    if (isString.error) {
+      res.status(411).json({
+        message: "Wrong Inputs",
+      });
+    }
     const me = await User.findOne({ _id: req.userId });
     const friend = await User.findOne({ username: req.body.username });
     if (friend) {

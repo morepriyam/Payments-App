@@ -84,6 +84,11 @@ npm run dev
 
 ### Pending Features 
 - `Transaction History` 🔄:
-    - Allows authenticated users to see their past transactions.
+    - Allow authenticated users to see their past transactions.
 - `Logic for handling received friend requests` 🤝:
-    - Allows authenticated users to transfer funds to another account.
+    - Allow authenticated users to transfer funds to another account.
+- `Friends can message each other` 🫂:
+    - Allow authenticated friends to text each other.
+
+### Frontend
+- `Currently working on FE - using tailwind` 💪🏻

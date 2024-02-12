@@ -38,8 +38,49 @@ const userSchema = new mongoose.Schema({
     required: true,
     minLength: 5,
   },
+  imageURL: {
+    type: String,
+  },
+  friends: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
-const User = new mongoose.model("User", userSchema);
+const accountSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  balance: {
+    type: Number,
+    required: true,
+  },
+});
 
-module.exports = { User };
+// have to add transactions logic
+
+// const transactionSchema = new mongoose.Schema({
+//   from: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: "User",
+//     required: true,
+//   },
+//   to: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: "User",
+//     required: true,
+//   },
+//   amount: {
+//     type: Number,
+//     required: true,
+//   },
+// });
+
+const User = mongoose.model("User", userSchema);
+const Account = mongoose.model("Account", accountSchema);
+
+module.exports = { User, Account };

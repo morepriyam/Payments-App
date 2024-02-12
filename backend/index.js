@@ -11,3 +11,7 @@ app.use(express.json());
 app.use("/api/v1", rootRouter);
 
 app.listen(3000, () => console.log("Running on 3000"));
+
+app.use((err, req, res, next) => {
+  res.status(500).json({ message: "Reached error handler" });
+});

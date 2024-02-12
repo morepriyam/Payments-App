@@ -16,14 +16,15 @@ const signupSchema = zod.object({
   phoneNumber: zod.number().optional(),
 });
 
-router.use("/signup", async (req, res) => {
-  const body = req.body;
-  const success = signupSchema.safeParse(req.body);
-  if (!success) {
-    return res.status(400).json({ message: "Incorrect inputs" });
-  }
-  const { username, email, password, phoneNumber } = body;
+router.post("/signup", async (req, res) => {
   try {
+    const body = req.body;
+    const success = signupSchema.safeParse(req.body);
+    if (success.error) {
+      return res.status(400).json({ message: "Incorrect inputs" });
+    }
+    const { username, email, password, phoneNumber } = body;
+
     const usernameCheck = await User.findOne({ username });
     if (usernameCheck) {
       return res.status(400).json({ message: "Username already taken" });
@@ -62,42 +63,64 @@ router.use("/signup", async (req, res) => {
 });
 
 const signinSchema = zod.object({
-  usernameOrEmailOrNumber: zod.string(),
+  usernameOrEmailOrNumber: zod.string().or(zod.number()),
   password: zod.string(),
 });
+const phoneNumberSchema = zod.number();
 
 router.post("/signin", async (req, res) => {
-  const success = signinSchema.safeParse(req.body);
-  if (!success) {
-    return res.status(400).json({ message: "Incorrect inputs" });
-  }
-  const { usernameOrEmailOrNumber, password } = req.body;
+  //shorten this handler code
   try {
-    const user = await User.findOne({
-      $or: [
-        { username: usernameOrEmailOrNumber },
-        { email: usernameOrEmailOrNumber },
-        { number: usernameOrEmailOrNumber },
-      ],
-    });
-    if (!user) {
-      return res
-        .status(401)
-        .json({ message: "Invalid Username / Email / Number" });
+    const success = signinSchema.safeParse(req.body);
+    if (success.error) {
+      return res.status(400).json({ message: "Incorrect inputs" });
     }
-
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
+    const { usernameOrEmailOrNumber, password } = req.body;
+    const isNumber = phoneNumberSchema.safeParse(usernameOrEmailOrNumber);
+    if (isNumber.error) {
+      const user = await User.findOne({
+        $or: [
+          { username: usernameOrEmailOrNumber },
+          { email: usernameOrEmailOrNumber },
+        ],
+      });
+      if (!user) {
+        return res
+          .status(401)
+          .json({ message: "Invalid Username / Email / Number" });
+      }
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+      const token = jwt.sign(
+        {
+          userId: user._id,
+        },
+        JWT_SECRET
+      );
+      res.json({ token });
+    } else {
+      const user = await User.findOne({ phoneNumber: usernameOrEmailOrNumber });
+      if (!user) {
+        return res
+          .status(401)
+          .json({ message: "Invalid Username / Email / Number" });
+      }
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+      const token = jwt.sign(
+        {
+          userId: user._id,
+        },
+        JWT_SECRET
+      );
+      res.json({ token });
     }
-    const token = jwt.sign(
-      {
-        userId: user._id,
-      },
-      JWT_SECRET
-    );
-    res.json({ token });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Server Error" });
   }
 });
@@ -112,17 +135,15 @@ const updateUserSchema = zod.object({
 });
 
 router.put("/", authMiddleware, async (req, res) => {
-  const { success } = updateUserSchema.safeParse(req.body);
-  if (!success) {
+  const success = updateUserSchema.safeParse(req.body);
+  if (success.error) {
     res.status(411).json({
       message: "Error while updating information / Wrong Inputs",
     });
   }
-
   await User.updateOne(req.body, {
     _id: req.userId,
   });
-
   res.json({
     message: "Updated successfully",
   });
@@ -130,7 +151,6 @@ router.put("/", authMiddleware, async (req, res) => {
 
 router.get("/bulk", async (req, res) => {
   const filter = req.query.filter || "";
-
   const users = await User.find({
     $or: [
       {
@@ -150,12 +170,12 @@ router.get("/bulk", async (req, res) => {
       },
     ],
   });
-
   res.json({
     user: users.map((user) => ({
       username: user.username,
       firstName: user.firstName,
       lastName: user.lastName,
+      imageURL: user.imageURL,
       _id: user._id,
     })),
   });
@@ -165,9 +185,13 @@ router.post("/addfriend", authMiddleware, async (req, res) => {
   try {
     const me = await User.findOne({ _id: req.userId });
     const friend = await User.findOne({ username: req.body.username });
-    me.friends.push(friend._id);
-    await me.save();
-    res.status(200).json({ message: "Added friend" });
+    if (friend) {
+      me.friends.push(friend._id);
+      await me.save();
+      res.status(200).json({ message: "Added friend" });
+    } else {
+      res.status(401).json({ message: "User does not exist" });
+    }
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }

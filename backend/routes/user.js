@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { User, Account } = require("../db");
+const { User, Account, Transaction } = require("../db");
 const zod = require("zod");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -21,21 +21,21 @@ router.post("/signup", async (req, res) => {
     const body = req.body;
     const success = signupSchema.safeParse(req.body);
     if (success.error) {
-      return res.status(400).json({ message: "Incorrect inputs" });
+      return res.status(400).json({ message: "Incorrect Inputs" });
     }
     const { username, email, password, phoneNumber } = body;
 
     const usernameCheck = await User.findOne({ username });
     if (usernameCheck) {
-      return res.status(400).json({ message: "Username already taken" });
+      return res.status(400).json({ message: "Username Already Taken" });
     }
     const emailCheck = await User.findOne({ email });
     if (emailCheck) {
-      return res.status(400).json({ message: "Email already taken" });
+      return res.status(400).json({ message: "Email Already Taken" });
     }
     const phoneNumberCheck = await User.findOne({ phoneNumber });
     if (phoneNumberCheck) {
-      return res.status(400).json({ message: "Number already taken" });
+      return res.status(400).json({ message: "Number Already Taken" });
     }
     // Generate salt
     const salt = await bcrypt.genSalt(10);
@@ -43,9 +43,15 @@ router.post("/signup", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const dbUser = await User.create({ ...body, password: hashedPassword });
+    const amount = 1 + Math.random() * 10000;
     await Account.create({
       userId: dbUser._id,
-      balance: 1 + Math.random() * 10000,
+      balance: amount,
+    });
+    await Transaction.create({
+      from: null, // system-generated funds
+      to: dbUser._id,
+      amount: amount,
     });
     const token = jwt.sign(
       {
@@ -54,11 +60,11 @@ router.post("/signup", async (req, res) => {
       JWT_SECRET
     );
     res.json({
-      message: "User created successfully",
+      message: "User Created Successfully",
       token,
     });
   } catch (error) {
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: "Signup Error" });
   }
 });
 
@@ -73,7 +79,7 @@ router.post("/signin", async (req, res) => {
   try {
     const success = signinSchema.safeParse(req.body);
     if (success.error) {
-      return res.status(400).json({ message: "Incorrect inputs" });
+      return res.status(400).json({ message: "Incorrect Inputs" });
     }
     const { usernameOrEmailOrNumber, password } = req.body;
     const isNumber = phoneNumberSchema.safeParse(usernameOrEmailOrNumber);
@@ -91,7 +97,7 @@ router.post("/signin", async (req, res) => {
       }
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (!passwordMatch) {
-        return res.status(401).json({ message: "Invalid credentials" });
+        return res.status(401).json({ message: "Invalid Credentials" });
       }
       const token = jwt.sign(
         {
@@ -109,7 +115,7 @@ router.post("/signin", async (req, res) => {
       }
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (!passwordMatch) {
-        return res.status(401).json({ message: "Invalid credentials" });
+        return res.status(401).json({ message: "Invalid Credentials" });
       }
       const token = jwt.sign(
         {
@@ -121,7 +127,7 @@ router.post("/signin", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: "Signin Error" });
   }
 });
 
@@ -139,17 +145,17 @@ router.put("/", authMiddleware, async (req, res) => {
     const success = updateUserSchema.safeParse(req.body);
     if (success.error) {
       res.status(411).json({
-        message: "Error while updating information / Wrong Inputs",
+        message: "Error while updating Information / Wrong Inputs",
       });
     }
     await User.updateOne(req.body, {
       _id: req.userId,
     });
     res.json({
-      message: "Updated successfully",
+      message: "Updated Successfully",
     });
   } catch (error) {
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: "Failed To Update" });
   }
 });
 
@@ -193,7 +199,7 @@ router.get("/bulk", authMiddleware, async (req, res) => {
       })),
     });
   } catch (error) {
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: "Search Failed" });
   }
 });
 
@@ -212,12 +218,12 @@ router.post("/addfriend", authMiddleware, async (req, res) => {
     if (friend) {
       me.friends.push(friend._id);
       await me.save();
-      res.status(200).json({ message: "Added friend" });
+      res.status(200).json({ message: "Friend Added" });
     } else {
-      res.status(401).json({ message: "User does not exist" });
+      res.status(401).json({ message: "User Does Not Exist" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: "Add Friend Failed" });
   }
 });
 
@@ -240,7 +246,26 @@ router.get("/friends", authMiddleware, async (req, res) => {
     res.status(200).json({ friends: populatedFriends });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: "Cannot Get" });
+  }
+});
+
+router.get("/receivedfriendrequests", authMiddleware, async (req, res) => {
+  try {
+    const usersWithFriend = await User.find({ friends: req.userId });
+    const removeExistingFriends = usersWithFriend.filter(
+      (user) => !user.friends.includes(req.userId)
+    );
+    const friendRequests = removeExistingFriends.map((user) => ({
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      imageURL: user.imageURL,
+    }));
+    res.status(200).json({ friendRequests });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Friend Req. Failed" });
   }
 });
 

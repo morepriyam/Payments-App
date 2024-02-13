@@ -61,26 +61,25 @@ const accountSchema = new mongoose.Schema({
   },
 });
 
-// have to add transactions logic
+const transactionSchema = new mongoose.Schema({
+  from: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  to: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  amount: {
+    type: Number,
+    required: true,
+  },
+});
 
-// const transactionSchema = new mongoose.Schema({
-//   from: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: "User",
-//     required: true,
-//   },
-//   to: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: "User",
-//     required: true,
-//   },
-//   amount: {
-//     type: Number,
-//     required: true,
-//   },
-// });
-
+const Transaction = mongoose.model("Transaction", transactionSchema);
 const User = mongoose.model("User", userSchema);
 const Account = mongoose.model("Account", accountSchema);
 
-module.exports = { User, Account };
+module.exports = { User, Account, Transaction };

@@ -82,13 +82,19 @@ npm run dev
     - Updates the balances of both the sender and the recipient accounts.
     - Commits the transaction if successful, otherwise aborts it and returns an error message.
 
-### Pending Features 
-- `Transaction History` 🔄:
-    - Allow authenticated users to see their past transactions.
-- `Logic for handling received friend requests` 🤝:
-    - Allow authenticated users to transfer funds to another account.
-- `Friends can message each other` 🫂:
+- `/deposit`: ✅-test p
+    - Allows authenticated users to add funds to their account.
+
+### Features 
+- `api/v1/transactions` 🔄: ✅-test p
+    - Allowed authenticated users to see their past transactions.
+    - Added appropriate schema.
+    - New transaction on signup and transfers and deposit endpoint.
+- `user/receivedfriendrequests` 🤝: ✅-test p
+    - Allows authenticated users to receive friend requests
+- `Friends can message each other` 🫂: Pending
     - Allow authenticated friends to text each other.
+    - Message Notifications
 
 ### Frontend
 - `Currently working on FE - using tailwind` 💪🏻

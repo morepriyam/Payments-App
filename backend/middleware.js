@@ -5,9 +5,7 @@ const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res
-      .status(401)
-      .json({ message: "Authorization header missing or invalid" });
+    return res.status(401).json({ message: "Authorization Header Invalid" });
   }
 
   const token = authHeader.split(" ")[1];
@@ -20,7 +18,7 @@ const authMiddleware = (req, res, next) => {
     next();
   } catch (err) {
     console.error("Authentication error:", err);
-    return res.status(403).json({ message: "Token invalid or expired" });
+    return res.status(403).json({ message: "Token Invalid or Expired" });
   }
 };
 

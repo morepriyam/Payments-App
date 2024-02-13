@@ -97,4 +97,4 @@ npm run dev
     - Message Notifications
 
 ### Frontend
-- `Currently working on FE - using tailwind` 💪🏻
+- `Currently working on FE - using tailwind in repo morepriyam/react-components` 💪🏻 

@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb://localhost:27017/paytm");
-
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -9,7 +7,6 @@ const userSchema = new mongoose.Schema({
     unique: true,
     trim: true,
     lowercase: true,
-    minLength: 3,
     maxLength: 30,
   },
   firstName: {
@@ -55,9 +52,17 @@ const accountSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   balance: {
     type: Number,
     required: true,
+    set: (v) => Math.round(v),
+    min: 0,
+    //max balance and its logic
   },
 });
 
@@ -75,6 +80,8 @@ const transactionSchema = new mongoose.Schema({
   amount: {
     type: Number,
     required: true,
+    set: (v) => Math.round(v),
+    max: 5000,
   },
 });
 

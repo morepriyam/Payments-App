@@ -9,26 +9,28 @@ router.get("/balance", authMiddleware, async (req, res) => {
   try {
     const account = await Account.findOne({ userId: req.userId });
     if (!account) {
-      return res.status(404).json({ error: "Account Not Found" });
+      res.status(404).json({ message: "Account Not Found" });
     }
     res.status(200).json({
       balance: account.balance,
     });
   } catch (error) {
-    res.status(500).json({ error: "Cannot Get Balance" });
+    res.status(500).json({ message: "Cannot Get Balance" });
   }
 });
 
 const transferSchema = zod.object({
   to: zod.string(),
-  amount: zod.number(),
+  amount: zod.number().int().max(5000),
 });
 router.post("/transfer", authMiddleware, async (req, res) => {
   let session;
   try {
     schemaCheck = transferSchema.safeParse(req.body);
     if (schemaCheck.error) {
-      return res.status(400).json({ message: "Incorrect Inputs" });
+      res
+        .status(400)
+        .json({ message: "Incorrect Inputs, Amount Must Be Integer < 5000" });
     }
     session = await mongoose.startSession();
 
@@ -41,16 +43,16 @@ router.post("/transfer", authMiddleware, async (req, res) => {
 
     if (!account || account.balance < amount) {
       await session.abortTransaction();
-      return res.status(400).json({
+      res.status(400).json({
         message: "Insufficient Balance",
       });
     }
 
-    const toAccount = await Account.findOne({ userId: to }).session(session);
+    const toAccount = await Account.findOne({ username: to }).session(session);
 
     if (!toAccount) {
       await session.abortTransaction();
-      return res.status(400).json({
+      res.status(400).json({
         message: "Invalid Account",
       });
     }
@@ -60,13 +62,13 @@ router.post("/transfer", authMiddleware, async (req, res) => {
       { $inc: { balance: -amount } }
     ).session(session);
     await Account.updateOne(
-      { userId: to },
+      { username: to },
       { $inc: { balance: amount } }
     ).session(session);
 
     await Transaction.create({
       from: req.userId,
-      to: to,
+      to: toAccount.userId,
       amount: amount,
     });
 
@@ -78,20 +80,20 @@ router.post("/transfer", authMiddleware, async (req, res) => {
     if (session) {
       await session.abortTransaction();
     }
-    return res.status(400).json({
+    res.status(400).json({
       message: "Failed To Transfer",
     });
   }
 });
 
-const depositSchema = zod.number();
+const depositSchema = zod.number().int().max(5000);
 
 router.post("/deposit", authMiddleware, async (req, res) => {
   try {
     const { amount } = req.body;
     const isNumber = depositSchema.safeParse(amount);
     if (isNumber.error) {
-      return res.status(400).json({ message: "Incorrect Inputs" });
+      res.status(400).json({ message: "Amount Must Be Integer < 5000" });
     }
     const userAccount = await Account.findOne({ userId: req.userId });
     userAccount.balance += amount;
@@ -103,7 +105,7 @@ router.post("/deposit", authMiddleware, async (req, res) => {
     });
     res.status(200).json({ message: "Deposit Done" });
   } catch (error) {
-    res.status(500).json({ error: "Deposit Failed" });
+    res.status(500).json({ message: "Deposit Failed" });
   }
 });
 

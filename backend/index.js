@@ -1,6 +1,8 @@
 const express = require("express");
 const rootRouter = require("./routes/index");
 const cors = require("cors");
+const mongoose = require("mongoose");
+const port = 3000;
 
 const app = express();
 
@@ -10,8 +12,17 @@ app.use(express.json());
 
 app.use("/api/v1", rootRouter);
 
-app.listen(3000, () => console.log("backend running on port 3000"));
+async function connectToMongoDB() {
+  try {
+    await mongoose.connect("mongodb://localhost:27017/paytm");
+    app.listen(port, () => console.log(`listening port : ${port}`));
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+    process.exit(1);
+  }
+}
 
+connectToMongoDB();
 // Catch-all route handler
 app.use((req, res, next) => {
   res.status(404).json({ message: "Route Not Found" });

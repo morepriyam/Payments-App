@@ -8,12 +8,12 @@ const { JWT_SECRET } = require("../config");
 const { authMiddleware } = require("../middleware");
 
 const signupSchema = zod.object({
-  username: zod.string().min(3).max(30).trim(),
+  username: zod.string().min(1).max(15).trim(),
   password: zod.string().min(5).trim(),
   firstName: zod.string(),
   lastName: zod.string(),
   email: zod.string().email(),
-  phoneNumber: zod.number().optional(),
+  phoneNumber: zod.number().int().optional(),
 });
 
 router.post("/signup", async (req, res) => {
@@ -21,31 +21,42 @@ router.post("/signup", async (req, res) => {
     const body = req.body;
     const success = signupSchema.safeParse(req.body);
     if (success.error) {
-      return res.status(400).json({ message: "Incorrect Inputs" });
+      res.status(400).json({ message: "Incorrect Inputs" });
     }
-    const { username, email, password, phoneNumber } = body;
+    const { username, email, password, phoneNumber, firstName, lastName } =
+      body;
 
     const usernameCheck = await User.findOne({ username });
     if (usernameCheck) {
-      return res.status(400).json({ message: "Username Already Taken" });
+      res.status(400).json({ message: "Username Already Taken" });
     }
     const emailCheck = await User.findOne({ email });
     if (emailCheck) {
-      return res.status(400).json({ message: "Email Already Taken" });
+      res.status(400).json({ message: "Email Already Taken" });
     }
     const phoneNumberCheck = await User.findOne({ phoneNumber });
     if (phoneNumberCheck) {
-      return res.status(400).json({ message: "Number Already Taken" });
+      res.status(400).json({ message: "Number Already Taken" });
     }
     // Generate salt
     const salt = await bcrypt.genSalt(10);
 
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const dbUser = await User.create({ ...body, password: hashedPassword });
-    const amount = 1 + Math.random() * 10000;
+    const dbUser = await User.create({
+      ...body,
+      imageURL:
+        "https://ui-avatars.com/api/?name=" + //https://ui-avatars.com/api/?name=priyam+more&size=250&background=3866e3&color=ffffff
+        firstName +
+        "+" +
+        lastName +
+        "&size=250&background=3866e3&color=ffffff",
+      password: hashedPassword,
+    });
+    const amount = Math.floor(1 + Math.random() * 5000);
     await Account.create({
       userId: dbUser._id,
+      username: dbUser.username,
       balance: amount,
     });
     await Transaction.create({
@@ -72,14 +83,14 @@ const signinSchema = zod.object({
   usernameOrEmailOrNumber: zod.string().or(zod.number()),
   password: zod.string(),
 });
-const phoneNumberSchema = zod.number();
+const phoneNumberSchema = zod.number().int();
 
 router.post("/signin", async (req, res) => {
   //shorten this handler code
   try {
     const success = signinSchema.safeParse(req.body);
     if (success.error) {
-      return res.status(400).json({ message: "Incorrect Inputs" });
+      res.status(400).json({ message: "Incorrect Inputs" });
     }
     const { usernameOrEmailOrNumber, password } = req.body;
     const isNumber = phoneNumberSchema.safeParse(usernameOrEmailOrNumber);
@@ -91,13 +102,11 @@ router.post("/signin", async (req, res) => {
         ],
       });
       if (!user) {
-        return res
-          .status(401)
-          .json({ message: "Invalid Username / Email / Number" });
+        res.status(401).json({ message: "Invalid Username / Email / Number" });
       }
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (!passwordMatch) {
-        return res.status(401).json({ message: "Invalid Credentials" });
+        res.status(401).json({ message: "Invalid Credentials" });
       }
       const token = jwt.sign(
         {
@@ -109,13 +118,11 @@ router.post("/signin", async (req, res) => {
     } else {
       const user = await User.findOne({ phoneNumber: usernameOrEmailOrNumber });
       if (!user) {
-        return res
-          .status(401)
-          .json({ message: "Invalid Username / Email / Number" });
+        res.status(401).json({ message: "Invalid Username / Email / Number" });
       }
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (!passwordMatch) {
-        return res.status(401).json({ message: "Invalid Credentials" });
+        res.status(401).json({ message: "Invalid Credentials" });
       }
       const token = jwt.sign(
         {
@@ -126,7 +133,6 @@ router.post("/signin", async (req, res) => {
       res.json({ token });
     }
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Signin Error" });
   }
 });
@@ -137,7 +143,7 @@ const updateUserSchema = zod.object({
   firstName: zod.string().optional(),
   lastName: zod.string().optional(),
   imageURL: zod.string().optional(),
-  phoneNumber: zod.number().optional(),
+  phoneNumber: zod.number().int().optional(),
 });
 
 router.put("/", authMiddleware, async (req, res) => {
@@ -148,9 +154,12 @@ router.put("/", authMiddleware, async (req, res) => {
         message: "Error while updating Information / Wrong Inputs",
       });
     }
-    await User.updateOne(req.body, {
-      _id: req.userId,
-    });
+    await User.updateOne(
+      {
+        _id: req.userId,
+      },
+      success.data
+    );
     res.json({
       message: "Updated Successfully",
     });
@@ -245,7 +254,6 @@ router.get("/friends", authMiddleware, async (req, res) => {
     );
     res.status(200).json({ friends: populatedFriends });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Cannot Get" });
   }
 });
@@ -264,7 +272,6 @@ router.get("/receivedfriendrequests", authMiddleware, async (req, res) => {
     }));
     res.status(200).json({ friendRequests });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Friend Req. Failed" });
   }
 });

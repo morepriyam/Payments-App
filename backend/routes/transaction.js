@@ -11,9 +11,9 @@ router.get("/", authMiddleware, async (req, res) => {
       .populate("from", "username")
       .populate("to", "username");
 
-    res.status(200).json(transactions);
+    return res.status(200).json(transactions);
   } catch (error) {
-    res.status(500).json({ message: "Failed To Get Transactions" });
+    return res.status(500).json({ message: "Failed To Get Transactions" });
   }
 });
 

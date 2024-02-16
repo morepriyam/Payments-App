@@ -2,12 +2,9 @@ import { Link } from "react-router-dom";
 
 export function BottomWarning({ label, buttonText, to }) {
   return (
-    <div className="flex justify-center py-2 text-sm">
+    <div className="text-md flex justify-center pt-2 text-slate-500">
       <div>{label}</div>
-      <Link
-        className="pointer cursor-pointer pl-1 text-blue-500 underline"
-        to={to}
-      >
+      <Link className="pointer cursor-pointer pl-1 text-blue-500" to={to}>
         {buttonText}
       </Link>
     </div>

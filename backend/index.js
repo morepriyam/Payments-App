@@ -23,11 +23,12 @@ async function connectToMongoDB() {
 }
 
 connectToMongoDB();
+
 // Catch-all route handler
 app.use((req, res, next) => {
-  res.status(404).json({ message: "Route Not Found" });
+  return res.status(404).json({ message: "Route Not Found" });
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: "Reached Error Handler" });
+  return res.status(500).json({ message: "Reached Error Handler" });
 });

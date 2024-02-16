@@ -11,13 +11,11 @@ const userSchema = new mongoose.Schema({
   },
   firstName: {
     type: String,
-    required: true,
     trim: true,
     maxLength: 50,
   },
   lastName: {
     type: String,
-    required: true,
     trim: true,
     maxLength: 50,
   },
@@ -62,7 +60,6 @@ const accountSchema = new mongoose.Schema({
     required: true,
     set: (v) => Math.round(v),
     min: 0,
-    //max balance and its logic
   },
 });
 

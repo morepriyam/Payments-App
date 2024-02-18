@@ -1,7 +1,3 @@
-import React from "react";
-
-const SendMoney = () => {
-  return <div></div>;
-};
-
-export default SendMoney;
+export function SendMoney() {
+  return <div>Landing</div>;
+}

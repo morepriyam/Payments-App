@@ -98,3 +98,4 @@ npm run dev
 
 ### Frontend
 - `Currently working on FE - using tailwind in repo morepriyam/react-components` 💪🏻 
+- `SignUp,SignIn and Landing Page is complete`

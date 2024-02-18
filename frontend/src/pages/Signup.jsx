@@ -5,8 +5,11 @@ import { Heading } from "../components/Heading";
 import { HeroCard } from "../components/HeroCard";
 import { InputBox } from "../components/InputBox";
 import { SubHeading } from "../components/SubHeading";
+import { GoBackButton } from "../components/GoBackButton";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Card } from "../components/Card";
+import hero from "../assets/app.jpg";
 
 export function Signup() {
   const [firstName, setFirstName] = useState();
@@ -19,13 +22,14 @@ export function Signup() {
 
   return (
     <div className=" flex h-[100dvh] flex-col items-center justify-center bg-neutral-100">
-      <div className="block p-5 text-4xl font-bold tracking-wide text-blue-500 md:hidden">
+      <div className="block p-5 text-4xl font-bold tracking-wide text-blue-600 hover:text-blue-500 md:hidden">
         Payments-App
       </div>
-      <div className="mx-5 flex justify-center rounded-xl bg-white p-8 sm:mx-auto">
+      <Card>
+        <GoBackButton to={"/"} />
         <div className="md:grid md:grid-cols-12">
           <div className="flex flex-col justify-center md:col-span-6 lg:col-span-8">
-            <HeroCard />
+            <HeroCard src={hero} />
           </div>
           <div className="mx-3 flex flex-col justify-center md:col-span-6  lg:col-span-4">
             <div className="w-100% p-2 px-4">
@@ -34,7 +38,7 @@ export function Signup() {
                 label={"Enter your infromation to create an account"}
               />
               <InputBox
-                placeholder="johndoe"
+                placeholder="JohnDoe"
                 label={"Username"}
                 variant="required"
                 onChange={(e) => {
@@ -113,7 +117,7 @@ export function Signup() {
             </div>
           </div>
         </div>
-      </div>
+      </Card>
     </div>
   );
 }

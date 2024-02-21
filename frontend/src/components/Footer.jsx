@@ -1,17 +1,16 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 export function Footer() {
   return (
-    <footer className="body-font border-t border-zinc-300 bg-white text-zinc-800 ">
+    <footer className="body-font z-20 w-full border-t border-zinc-300 bg-white text-zinc-800 ">
       <div className="container px-4 py-10">
-        <div className="grid items-center justify-between gap-4 md:grid-cols-[1fr_auto] md:gap-8 lg:grid-cols-[1fr_auto_1fr]">
+        <div className="grid items-center justify-between gap-4 md:grid-cols-[1fr_auto]">
           <p className="text-sm tracking-wider text-slate-500 opacity-50">
             © 2024 Payments-App All rights reserved
           </p>
           <div className="flex items-center gap-4 md:order-first md:gap-8">
             <nav className="flex items-center gap-4 text-sm md:gap-6">
-              <Link className="hover:underline" to={""}>
+              <Link className="hover:underline" to={"/"}>
                 Home
               </Link>
               <Link className="hover:underline" to={""}>
@@ -26,18 +25,18 @@ export function Footer() {
             </nav>
             <div className="flex items-center gap-4 md:gap-6">
               <Link
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full hover:shadow-md"
-                to={""}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-blue-300 hover:text-white"
+                to={"https://twitter.com/Priyamrm"}
+                target={"_blank"}
               >
                 <TwitterIcon className="h-4 w-4" />
-                <span className="sr-only">Twitter</span>
               </Link>
               <Link
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full hover:shadow-md"
-                to={""}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-red-200"
+                to={"https://github.com/morepriyam/Payments-App.git"}
+                target={"_blank"}
               >
                 <GithubIcon className="h-4 w-4" />
-                <span className="sr-only">GitHub</span>
               </Link>
             </div>
           </div>

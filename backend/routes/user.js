@@ -13,7 +13,7 @@ const signupSchema = zod.object({
   firstName: zod.string().trim().min(1).optional(),
   lastName: zod.string().trim().min(1).optional(),
   email: zod.string().email(),
-  phoneNumber: zod.number().int().optional(),
+  phoneNumber: zod.number().int(),
 });
 
 router.post("/signup", async (req, res) => {
@@ -45,7 +45,7 @@ router.post("/signup", async (req, res) => {
     const dbUser = await User.create({
       ...body,
       imageURL:
-        "https://ui-avatars.com/api/?name=" + //https://ui-avatars.com/api/?name=priyam+more&size=250&background=3866e3&color=ffffff
+        "https://ui-avatars.com/api/?name=" +
         username.trim() +
         "&size=250&background=3866e3&color=ffffff",
       password: hashedPassword,
@@ -129,7 +129,7 @@ router.post("/signin", async (req, res) => {
         },
         JWT_SECRET
       );
-      return res.json({ token });
+      return res.json({ message: "Signin Successfull", token });
     }
   } catch (error) {
     return res.status(500).json({ message: "Signin Error" });
@@ -274,4 +274,22 @@ router.get("/receivedfriendrequests", authMiddleware, async (req, res) => {
   }
 });
 
+router.post("/me", authMiddleware, (req, res) => {
+  try {
+    res.status(200).json();
+  } catch (error) {
+    res.status(500).json();
+  }
+});
+
+router.get("/me2", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.userId });
+    if (user) {
+      res.json({ user: user });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Request Failed" });
+  }
+});
 module.exports = router;

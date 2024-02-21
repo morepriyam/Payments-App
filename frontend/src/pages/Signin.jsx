@@ -5,16 +5,27 @@ import { Heading } from "../components/Heading";
 import { HeroCard } from "../components/HeroCard";
 import { InputBox } from "../components/InputBox";
 import { SubHeading } from "../components/SubHeading";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { GoBackButton } from "../components/GoBackButton";
 import { Card } from "../components/Card";
 import hero from "../assets/app.jpg";
+import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
+import { isAuthenticatedState, tokenState } from "../recoil/Auth";
 
 export function Signin() {
   const [usernameOrEmailOrNumber, setUsernameOrEmailOrNumber] = useState();
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const setTokenState = useSetRecoilState(tokenState);
+
+  const authLoadable = useRecoilValueLoadable(isAuthenticatedState);
+
+  useEffect(() => {
+    if (authLoadable.state === "hasValue" && authLoadable.contents) {
+      navigate("/dashboard");
+    }
+  }, [authLoadable, navigate]);
 
   return (
     <div className=" flex h-[100dvh] flex-col items-center justify-center bg-neutral-100">
@@ -52,18 +63,26 @@ export function Signin() {
                 <Button
                   label={"Sign in"}
                   onClick={async () => {
-                    const response = await axios.post(
-                      "http://localhost:3000/api/v1/user/signin",
-                      {
-                        usernameOrEmailOrNumber:
-                          usernameOrEmailOrNumber === ""
-                            ? undefined
-                            : usernameOrEmailOrNumber,
-                        password,
-                      },
-                    );
-                    localStorage.setItem("token", response.data.token);
-                    navigate("/dashboard");
+                    try {
+                      const response = await axios.post(
+                        "http://localhost:3000/api/v1/user/signin",
+                        {
+                          usernameOrEmailOrNumber:
+                            usernameOrEmailOrNumber === ""
+                              ? undefined
+                              : usernameOrEmailOrNumber,
+                          password,
+                        },
+                      );
+
+                      if (response.status === 200) {
+                        localStorage.setItem("token", response.data.token);
+                        setTokenState(response.data.token);
+                        navigate("/dashboard");
+                      }
+                    } catch (error) {
+                      console.log("error signing in");
+                    }
                   }}
                 />
               </div>

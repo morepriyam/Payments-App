@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BottomWarning } from "../components/BottomWarning";
 import { Button } from "../components/Button";
 import { Heading } from "../components/Heading";
@@ -10,6 +10,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Card } from "../components/Card";
 import hero from "../assets/app.jpg";
+import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
+import { isAuthenticatedState, tokenState } from "../recoil/Auth";
 
 export function Signup() {
   const [firstName, setFirstName] = useState();
@@ -19,6 +21,15 @@ export function Signup() {
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState();
   const navigate = useNavigate();
+  const setTokenState = useSetRecoilState(tokenState);
+
+  const authLoadable = useRecoilValueLoadable(isAuthenticatedState);
+
+  useEffect(() => {
+    if (authLoadable.state === "hasValue" && authLoadable.contents) {
+      navigate("/dashboard");
+    }
+  }, [authLoadable, navigate]);
 
   return (
     <div className=" flex h-[100dvh] flex-col items-center justify-center bg-neutral-100">
@@ -63,6 +74,14 @@ export function Signup() {
                 }}
               />
               <InputBox
+                placeholder="1234567890"
+                variant={["number", "required"]}
+                label={"Phone"}
+                onChange={(e) => {
+                  setPhoneNumber(e.target.value);
+                }}
+              />
+              <InputBox
                 placeholder="John"
                 label={"First Name"}
                 onChange={(e) => {
@@ -78,34 +97,32 @@ export function Signup() {
                   setLastName(sanitizedValue);
                 }}
               />
-
-              <InputBox
-                placeholder="1234567890"
-                variant="number"
-                label={"Phone"}
-                onChange={(e) => {
-                  setPhoneNumber(e.target.value);
-                }}
-              />
               <div className="pt-4">
                 <Button
                   label={"Sign up"}
                   onClick={async () => {
-                    const response = await axios.post(
-                      "http://localhost:3000/api/v1/user/signup",
-                      {
-                        username,
-                        email,
-                        password,
-                        firstName: firstName === "" ? undefined : firstName,
-                        lastName: lastName === "" ? undefined : lastName,
-                        phoneNumber: phoneNumber
-                          ? parseInt(phoneNumber)
-                          : undefined,
-                      },
-                    );
-                    localStorage.setItem("token", response.data.token);
-                    navigate("/dashboard");
+                    try {
+                      const response = await axios.post(
+                        "http://localhost:3000/api/v1/user/signup",
+                        {
+                          username,
+                          email,
+                          password,
+                          firstName: firstName === "" ? undefined : firstName,
+                          lastName: lastName === "" ? undefined : lastName,
+                          phoneNumber: phoneNumber
+                            ? parseInt(phoneNumber)
+                            : undefined,
+                        },
+                      );
+                      if (response.status === 200) {
+                        localStorage.setItem("token", response.data.token);
+                        setTokenState(response.data.token);
+                        navigate("/dashboard");
+                      }
+                    } catch (error) {
+                      console.log("error signing up");
+                    }
                   }}
                 />
               </div>

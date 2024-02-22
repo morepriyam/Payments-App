@@ -80,7 +80,7 @@ export function Sidebar() {
           />
         </svg>
       ),
-      src: "/sendmoney",
+      src: "/send",
     },
   ];
 

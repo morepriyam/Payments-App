@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export function Footer() {
   return (
     <footer className="body-font z-20 w-full border-t border-zinc-300 bg-white text-zinc-800 ">
-      <div className="container px-4 py-10">
+      <div className="container px-8 py-10">
         <div className="grid items-center justify-between gap-4 md:grid-cols-[1fr_auto]">
           <p className="text-sm tracking-wider text-slate-500 opacity-50">
             © 2024 Payments-App All rights reserved
@@ -19,7 +19,11 @@ export function Footer() {
               <Link className="hover:underline" to={""}>
                 Support
               </Link>
-              <Link className="hover:underline" to={""}>
+              <Link
+                className="hover:underline"
+                to={"https://github.com/morepriyam/Payments-App/commits/main/"}
+                target={"_blank"}
+              >
                 Commits
               </Link>
             </nav>

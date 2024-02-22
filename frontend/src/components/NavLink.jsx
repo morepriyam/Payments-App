@@ -1,8 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function NavLink({ icon, label, src, open }) {
+  const navigate = useNavigate();
   return (
-    <div className="flex cursor-pointer items-center rounded-full px-2 py-3 hover:bg-blue-50">
+    <div
+      className="flex cursor-pointer items-center rounded-full px-2 py-3 hover:bg-blue-50"
+      onClick={() => navigate(src)}
+    >
       <Link to={src}>{icon}</Link>
       <span
         className={`ml-3 ${!open && "scale-0"}  font-medium text-zinc-800 duration-100`}

@@ -5,6 +5,8 @@ import { Signup } from "./pages/Signup";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Landing } from "./pages/Landing";
 import { RecoilRoot } from "recoil";
+import { Transactions } from "./pages/Transactions";
+import { Friends } from "./pages/Friends";
 
 export default function App() {
   return (
@@ -17,6 +19,8 @@ export default function App() {
             <Route path="/signin" element={<Signin />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/send" element={<SendMoney />} />
+            <Route path="/friends" element={<Friends />} />
+            <Route path="/transactions" element={<Transactions />} />
           </Routes>
         </BrowserRouter>
       </RecoilRoot>

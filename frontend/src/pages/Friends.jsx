@@ -5,9 +5,8 @@ import { Appbar } from "../components/Appbar";
 import { useRecoilValueLoadable } from "recoil";
 import { isAuthenticatedState } from "../recoil/Auth";
 import { useNavigate } from "react-router-dom";
-import Balance from "../components/Balance";
 
-export function Dashboard() {
+export function Friends() {
   const navigate = useNavigate();
   const authLoadable = useRecoilValueLoadable(isAuthenticatedState);
 
@@ -27,9 +26,7 @@ export function Dashboard() {
         <Sidebar />
         <div className="h-screen flex-1 bg-neutral-100">
           <Appbar />
-          <div className="grid p-2 sm:grid-cols-3">
-            <Balance />
-          </div>
+          <div className="grid p-2 sm:grid-cols-3">Friends</div>
         </div>
       </div>
       <Footer />

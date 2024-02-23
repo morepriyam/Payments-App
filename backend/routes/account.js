@@ -97,14 +97,20 @@ router.post("/deposit", authMiddleware, async (req, res) => {
       return res.status(400).json({ message: "Amount Must Be Integer < 5000" });
     }
     const userAccount = await Account.findOne({ userId: req.userId });
-    userAccount.balance += amount;
-    userAccount.save();
-    await Transaction.create({
-      from: "65cf2dd9583ea6e1c7b4287c", // system-generated funds
-      to: req.userId,
-      amount: amount,
-    });
-    return res.status(200).json({ message: "Deposit Done" });
+    if (userAccount.balance <= 1000000) {
+      userAccount.balance += amount;
+      userAccount.save();
+      await Transaction.create({
+        from: "65d50205ed4948afb1ff91a6", // system-generated funds
+        to: req.userId,
+        amount: amount,
+      });
+      return res
+        .status(200)
+        .json({ message: "Deposit Done", balance: userAccount.balance });
+    } else {
+      return res.status(200).json({ message: "Max-Balance - 1000000" });
+    }
   } catch (error) {
     return res.status(500).json({ message: "Deposit Failed" });
   }

@@ -1,21 +1,12 @@
-import { useEffect } from "react";
 import { Footer } from "../components/Footer";
 import { Sidebar } from "../components/SideBar";
 import { Appbar } from "../components/Appbar";
-import { useRecoilValueLoadable } from "recoil";
-import { isAuthenticatedState } from "../recoil/Auth";
-import { useNavigate } from "react-router-dom";
-import Balance from "../components/Balance";
+import { Balance } from "../components/Balance";
+import { useAuth } from "../hooks/useAuth";
+import { AddMoney } from "../components/AddMoney";
 
 export function Dashboard() {
-  const navigate = useNavigate();
-  const authLoadable = useRecoilValueLoadable(isAuthenticatedState);
-
-  useEffect(() => {
-    if (authLoadable.state === "hasValue" && !authLoadable.contents) {
-      navigate("/signin");
-    }
-  }, [authLoadable, navigate]);
+  const authLoadable = useAuth();
 
   if (authLoadable.state === "loading") {
     return <div>Loading...</div>;
@@ -27,8 +18,9 @@ export function Dashboard() {
         <Sidebar />
         <div className="h-screen flex-1 bg-neutral-100">
           <Appbar />
-          <div className="grid p-2 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-4 p-2 md:grid-cols-3">
             <Balance />
+            <AddMoney />
           </div>
         </div>
       </div>

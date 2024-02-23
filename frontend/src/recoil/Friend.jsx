@@ -3,10 +3,10 @@ import axios from "axios";
 
 import { tokenState } from "./Auth";
 
-export const transaction = atom({
-  key: "transaction",
+export const friends = atom({
+  key: "friends",
   default: selector({
-    key: "fetchTransaction",
+    key: "fetchFriends",
     get: async ({ get }) => {
       const token = get(tokenState);
 
@@ -18,7 +18,7 @@ export const transaction = atom({
 
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/v1/transactions",
+          "http://localhost:3000/api/v1/user/friends",
           {
             headers: {
               "Content-Type": "application/json",
@@ -28,12 +28,12 @@ export const transaction = atom({
         );
 
         if (response.status !== 200) {
-          throw new Error("Failed to fetch transactions");
+          throw new Error("Failed to fetch friends");
         }
 
-        return response.data.transactions.reverse();
+        return response.data.friends;
       } catch (error) {
-        throw new Error(`Error fetching transactions: ${error.message}`);
+        throw new Error(`Error fetching friends: ${error.message}`);
       }
     },
   }),

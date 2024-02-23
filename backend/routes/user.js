@@ -57,7 +57,7 @@ router.post("/signup", async (req, res) => {
       balance: amount,
     });
     await Transaction.create({
-      from: "65cf2dd9583ea6e1c7b4287c", // system-generated funds
+      from: "65d50205ed4948afb1ff91a6", // system-generated funds
       to: dbUser._id,
       amount: amount,
     });
@@ -282,9 +282,11 @@ router.post("/me", authMiddleware, (req, res) => {
   }
 });
 
-router.get("/me2", authMiddleware, async (req, res) => {
+router.get("/userInfo", authMiddleware, async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.userId });
+    const user = await User.findOne({ _id: req.userId }).select(
+      "-_id -password -friends -__v"
+    );
     if (user) {
       res.json({ user: user });
     }

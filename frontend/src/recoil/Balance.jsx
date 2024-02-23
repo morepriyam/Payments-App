@@ -10,29 +10,29 @@ export const balance = atom({
     get: async ({ get }) => {
       const token = get(tokenState);
 
-      if (token) {
-        const Authorization = `Bearer ${token}`;
+      if (!token) {
+        throw new Error("No token");
+      }
+      const Authorization = `Bearer ${token}`;
 
-        try {
-          const response = await axios.get(
-            "http://localhost:3000/api/v1/account/balance",
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization,
-              },
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/account/balance",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization,
             },
-          );
-          if (response.status === 200) {
-            return response.data.balance;
-          } else {
-            return error;
-          }
-        } catch (error) {
-          throw error;
+          },
+        );
+
+        if (response.status !== 200) {
+          throw new Error("Axios request failed");
         }
-      } else {
-        throw error;
+
+        return response.data.balance;
+      } catch (error) {
+        throw new Error(`Error fetching balance: ${error.message}`);
       }
     },
   }),

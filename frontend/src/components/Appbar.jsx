@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { profileImage } from "../recoil/User";
 import { useRecoilValueLoadable } from "recoil";
 

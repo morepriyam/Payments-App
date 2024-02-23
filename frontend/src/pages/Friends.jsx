@@ -1,22 +1,14 @@
-import { useEffect } from "react";
 import { Footer } from "../components/Footer";
 import { Sidebar } from "../components/SideBar";
 import { Appbar } from "../components/Appbar";
+import { useAuth } from "../hooks/useAuth";
 import { useRecoilValueLoadable } from "recoil";
-import { isAuthenticatedState } from "../recoil/Auth";
-import { useNavigate } from "react-router-dom";
+import { friends } from "../recoil/Friend";
 
 export function Friends() {
-  const navigate = useNavigate();
-  const authLoadable = useRecoilValueLoadable(isAuthenticatedState);
-
-  useEffect(() => {
-    if (authLoadable.state === "hasValue" && !authLoadable.contents) {
-      navigate("/signin");
-    }
-  }, [authLoadable, navigate]);
-
-  if (authLoadable.state === "loading") {
+  const authLoadable = useAuth();
+  const friend = useRecoilValueLoadable(friends);
+  if (authLoadable.state === "loading" || friend.state === "loading") {
     return <div>Loading...</div>;
   }
 

@@ -10,29 +10,30 @@ export const user = atom({
     get: async ({ get }) => {
       const token = get(tokenState);
 
-      if (token) {
-        const Authorization = `Bearer ${token}`;
+      if (!token) {
+        throw new Error("No token available");
+      }
 
-        try {
-          const response = await axios.get(
-            "http://localhost:3000/api/v1/user/me2",
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization,
-              },
+      const Authorization = `Bearer ${token}`;
+
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/user/userInfo",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization,
             },
-          );
-          if (response.status === 200) {
-            return response.data.user;
-          } else {
-            return error;
-          }
-        } catch (error) {
-          throw error;
+          },
+        );
+
+        if (response.status !== 200) {
+          throw new Error("Failed to fetch user info");
         }
-      } else {
-        throw error;
+
+        return response.data.user;
+      } catch (error) {
+        throw new Error(`Error fetching user info: ${error.message}`);
       }
     },
   }),
@@ -43,5 +44,13 @@ export const profileImage = selector({
   get: ({ get }) => {
     const userData = get(user);
     return userData.imageURL;
+  },
+});
+
+export const username = selector({
+  key: "username",
+  get: ({ get }) => {
+    const userData = get(user);
+    return userData.username;
   },
 });

@@ -63,24 +63,31 @@ const accountSchema = new mongoose.Schema({
   },
 });
 
-const transactionSchema = new mongoose.Schema({
-  from: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+const transactionSchema = new mongoose.Schema(
+  {
+    from: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    to: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    amount: {
+      type: Number,
+      required: true,
+      set: (v) => Math.round(v),
+      max: 5000,
+    },
   },
-  to: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-  amount: {
-    type: Number,
-    required: true,
-    set: (v) => Math.round(v),
-    max: 5000,
-  },
-});
+  {
+    timestamps: {
+      createdAt: "created_at",
+    },
+  }
+);
 
 const Transaction = mongoose.model("Transaction", transactionSchema);
 const User = mongoose.model("User", userSchema);

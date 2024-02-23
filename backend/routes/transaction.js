@@ -11,8 +11,24 @@ router.get("/", authMiddleware, async (req, res) => {
       .populate("from", "username")
       .populate("to", "username");
 
-    return res.status(200).json(transactions);
+    const modifiedTransactions = transactions.map((transaction) => {
+      const utcDate = new Date(transaction.created_at);
+
+      const istDateString = utcDate.toLocaleString("en-US", {
+        timeZone: "Asia/Kolkata",
+      });
+
+      return {
+        from: transaction.from.username,
+        to: transaction.to.username,
+        amount: transaction.amount,
+        date: istDateString.split(", "),
+      };
+    });
+
+    return res.status(200).json({ transactions: modifiedTransactions });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: "Failed To Get Transactions" });
   }
 });

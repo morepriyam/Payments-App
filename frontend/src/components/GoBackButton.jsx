@@ -1,23 +1,10 @@
 import { Link } from "react-router-dom";
-
+import { ChevronDoubleLeftIcon } from "@heroicons/react/24/solid";
 export function GoBackButton({ to }) {
   return (
     <div className="absolute left-4 top-[43px]">
       <Link className="inline-flex items-center  hover:-translate-x-1" to={to}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="1.5"
-          stroke="currentColor"
-          className="h-8 w-8 text-blue-600"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5"
-          />
-        </svg>
+        <ChevronDoubleLeftIcon className="h-8 w-8 text-blue-600" />
       </Link>
     </div>
   );

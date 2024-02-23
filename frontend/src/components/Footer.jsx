@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export function Footer() {
   return (
-    <footer className="body-font z-20 w-full border-t border-zinc-300 bg-white text-zinc-800 ">
+    <footer className="body-font relative z-30 w-full border-t border-zinc-300 bg-white text-zinc-800 ">
       <div className="container px-8 py-10">
         <div className="grid items-center justify-between gap-4 md:grid-cols-[1fr_auto]">
           <p className="text-sm tracking-wider text-slate-500 opacity-50">
@@ -13,7 +13,7 @@ export function Footer() {
               <Link className="hover:underline" to={"/"}>
                 Home
               </Link>
-              <Link className="hover:underline" to={""}>
+              <Link className="hover:underline" to={"/"}>
                 Features
               </Link>
               <Link className="hover:underline" to={""}>

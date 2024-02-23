@@ -1,24 +1,12 @@
-import { useEffect } from "react";
 import { Footer } from "../components/Footer";
 import { Sidebar } from "../components/SideBar";
 import { Appbar } from "../components/Appbar";
-import { useRecoilValueLoadable } from "recoil";
-import { isAuthenticatedState } from "../recoil/Auth";
-import { useNavigate } from "react-router-dom";
-import { transaction } from "../recoil/Transaction";
-
+import { TransactionCard } from "../components/TransactionCard";
+import { useAuth } from "../hooks/useAuth";
 export function Transactions() {
-  const navigate = useNavigate();
-  const authLoadable = useRecoilValueLoadable(isAuthenticatedState);
-  const transactions = useRecoilValueLoadable(transaction);
+  const authLoadable = useAuth();
 
-  useEffect(() => {
-    if (authLoadable.state === "hasValue" && !authLoadable.contents) {
-      navigate("/signin");
-    }
-  }, [authLoadable, navigate]);
-
-  if (authLoadable.state === "loading" || transactions.state === "loading") {
+  if (authLoadable.state === "loading") {
     return <div>Loading...</div>;
   }
 
@@ -28,7 +16,7 @@ export function Transactions() {
         <Sidebar />
         <div className="h-screen flex-1 bg-neutral-100">
           <Appbar />
-          <div className="grid p-2 sm:grid-cols-3">{transactions.contents}</div>
+          <TransactionCard />
         </div>
       </div>
       <Footer />

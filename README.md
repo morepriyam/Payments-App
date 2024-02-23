@@ -58,18 +58,23 @@ npm run dev
     - Searches for users whose first name, last name, or username matches the provided filter using regex.
     - Returns an array of user objects containing their username, first name, last name, image url and user ID.
 
-- `/addfriend`:
+- `/addfriend`: test-p
     - Allows authenticated users to add other users as friends.
     - Adds the specified user to the current user's list of friends if the user exists.
     - Returns a success message upon successfully adding the friend.
 
-- `/friends`:
+- `/friends`: test-p
     - Retrieves a list of friends for the authenticated user.
     - Retrieves the friends' information from the database and filters out unnecessary fields.
     - If both friends have added each other, displays their email and phone number.
     - Otherwise, displays only basic information such as username, first name, last name, and image URL.
 
+- `/receivedfriendrequests`: test-p
+    - Allows authenticated users to receive friend requests
+
+
 ### /api/v1/account 
+
 - `/balance`:
     - Retrieves the account balance for the authenticated user.
     - Queries the database to find the account associated with the user ID.
@@ -82,20 +87,26 @@ npm run dev
     - Updates the balances of both the sender and the recipient accounts.
     - Commits the transaction if successful, otherwise aborts it and returns an error message.
 
-- `/deposit`: ✅-test p
+- `/deposit`: 
     - Allows authenticated users to add funds to their account.
 
-### Features 
-- `api/v1/transactions` 🔄: ✅-test p
+### /api/v1/transactions
+
+- `/`: 
     - Allowed authenticated users to see their past transactions.
     - Added appropriate schema.
     - New transaction on signup and transfers and deposit endpoint.
-- `user/receivedfriendrequests` 🤝: ✅-test p
-    - Allows authenticated users to receive friend requests
+
+
+
+### Pending Features 
 - `Friends can message each other` 🫂: Pending
     - Allow authenticated friends to text each other.
     - Message Notifications
 
 ### Frontend
-- `Currently working on FE - using tailwind in repo morepriyam/react-components` 💪🏻 
-- `SignUp,SignIn and Landing Page is complete`
+- `SignUp,SignIn and Landing Page`✅
+- `Transactions Page`✅
+- `SendMoney Page`✅
+- `Dashboard Page` -Pending
+- `Friends Page` -Pending

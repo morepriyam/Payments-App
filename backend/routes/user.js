@@ -57,7 +57,7 @@ router.post("/signup", async (req, res) => {
       balance: amount,
     });
     await Transaction.create({
-      from: "65d50205ed4948afb1ff91a6", // system-generated funds
+      from: "65d9e5e61e2a68bb9522656b", // system-generated funds
       to: dbUser._id,
       amount: amount,
     });
@@ -72,6 +72,7 @@ router.post("/signup", async (req, res) => {
       token,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: "Signup Error" });
   }
 });
@@ -178,21 +179,26 @@ router.get("/bulk", authMiddleware, async (req, res) => {
       });
     }
     const users = await User.find({
-      $or: [
+      $and: [
+        { _id: { $ne: req.userId } },
         {
-          firstName: {
-            $regex: filter,
-          },
-        },
-        {
-          lastName: {
-            $regex: filter,
-          },
-        },
-        {
-          username: {
-            $regex: filter,
-          },
+          $or: [
+            {
+              firstName: {
+                $regex: filter,
+              },
+            },
+            {
+              lastName: {
+                $regex: filter,
+              },
+            },
+            {
+              username: {
+                $regex: filter,
+              },
+            },
+          ],
         },
       ],
     });
@@ -202,10 +208,10 @@ router.get("/bulk", authMiddleware, async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         imageURL: user.imageURL,
-        _id: user._id,
       })),
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: "Search Failed" });
   }
 });
@@ -223,6 +229,9 @@ router.post("/addfriend", authMiddleware, async (req, res) => {
     const me = await User.findOne({ _id: req.userId });
     const friend = await User.findOne({ username: req.body.username });
     if (friend) {
+      if (me.friends.includes(friend._id)) {
+        return res.status(200).json({ message: "Friend already added" });
+      }
       me.friends.push(friend._id);
       await me.save();
       return res.status(200).json({ message: "Friend Added" });
@@ -243,9 +252,9 @@ router.get("/friends", authMiddleware, async (req, res) => {
         const isFriend = friend.friends.includes(req.userId);
         let fieldsToSelect;
         if (isFriend) {
-          fieldsToSelect = "-friends -password";
+          fieldsToSelect = "-friends -password -_id";
         } else {
-          fieldsToSelect = "username firstName lastName imageURL";
+          fieldsToSelect = "username firstName lastName imageURL -_id";
         }
         return await User.findOne({ _id: friend._id }).select(fieldsToSelect);
       })

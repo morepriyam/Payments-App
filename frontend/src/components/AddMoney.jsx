@@ -45,34 +45,36 @@ export function AddMoney() {
                   },
                 },
               );
-              setBal(response.data.balance);
-              const currentDate = new Date();
-              const formattedDate = currentDate
-                .toLocaleDateString("en-US", {
-                  month: "2-digit",
-                  day: "2-digit",
-                  year: "numeric",
-                })
-                .replace(/^0/, "");
+              if (response.status === 200) {
+                setBal(response.data.balance);
+                const currentDate = new Date();
+                const formattedDate = currentDate
+                  .toLocaleDateString("en-US", {
+                    month: "2-digit",
+                    day: "2-digit",
+                    year: "numeric",
+                  })
+                  .replace(/^0/, "");
 
-              const formattedTime = currentDate
-                .toLocaleTimeString("en-US", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                  hour12: true,
-                })
-                .replace(/^0/, "");
+                const formattedTime = currentDate
+                  .toLocaleTimeString("en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: true,
+                  })
+                  .replace(/^0/, "");
 
-              setTrans((c) => [
-                {
-                  from: "admin",
-                  to: user.contents,
-                  amount: parseInt(deposit),
-                  date: [formattedDate, formattedTime],
-                },
-                ...c,
-              ]);
+                setTrans((c) => [
+                  {
+                    from: "admin",
+                    to: user.contents,
+                    amount: parseInt(deposit),
+                    date: [formattedDate, formattedTime],
+                  },
+                  ...c,
+                ]);
+              }
             } catch (error) {
               console.log(error);
             }

@@ -37,10 +37,10 @@ export function TransferMoney() {
 
   return (
     <div className="w-full rounded-lg border border-blue-500 bg-white p-2 shadow-md">
+      <div>@username</div>
       <input
         name="input"
         value={userName ? `@${userName}` : "@"}
-        placeholder="@username"
         className="w-full rounded-md border px-3 py-2 text-gray-700 focus:border-blue-500 focus:outline-none "
         onChange={(e) => handleUserNameChange(e.target.value)}
       />
@@ -58,7 +58,7 @@ export function TransferMoney() {
             const token = localStorage.getItem("token");
             const Authorization = `Bearer ${token}`;
             try {
-              await axios.post(
+              const response = await axios.post(
                 "http://localhost:3000/api/v1/account/transfer",
                 { to: userName, amount: parseInt(deposit) },
                 {
@@ -68,34 +68,36 @@ export function TransferMoney() {
                   },
                 },
               );
-              setBal((prevBalance) => prevBalance - parseInt(deposit));
-              const currentDate = new Date();
-              const formattedDate = currentDate
-                .toLocaleDateString("en-US", {
-                  month: "2-digit",
-                  day: "2-digit",
-                  year: "numeric",
-                })
-                .replace(/^0/, "");
+              if (response.status === 200) {
+                setBal((prevBalance) => prevBalance - parseInt(deposit));
+                const currentDate = new Date();
+                const formattedDate = currentDate
+                  .toLocaleDateString("en-US", {
+                    month: "2-digit",
+                    day: "2-digit",
+                    year: "numeric",
+                  })
+                  .replace(/^0/, "");
 
-              const formattedTime = currentDate
-                .toLocaleTimeString("en-US", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                  hour12: true,
-                })
-                .replace(/^0/, "");
+                const formattedTime = currentDate
+                  .toLocaleTimeString("en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: true,
+                  })
+                  .replace(/^0/, "");
 
-              setTrans((c) => [
-                {
-                  from: user.contents,
-                  to: userName,
-                  amount: parseInt(deposit),
-                  date: [formattedDate, formattedTime],
-                },
-                ...c,
-              ]);
+                setTrans((c) => [
+                  {
+                    from: user.contents,
+                    to: userName,
+                    amount: parseInt(deposit),
+                    date: [formattedDate, formattedTime],
+                  },
+                  ...c,
+                ]);
+              }
             } catch (error) {
               console.log(error);
             }

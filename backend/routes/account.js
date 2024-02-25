@@ -101,7 +101,7 @@ router.post("/deposit", authMiddleware, async (req, res) => {
       userAccount.balance += amount;
       userAccount.save();
       await Transaction.create({
-        from: "65d50205ed4948afb1ff91a6", // system-generated funds
+        from: "65d9e5e61e2a68bb9522656b", // system-generated funds
         to: req.userId,
         amount: amount,
       });

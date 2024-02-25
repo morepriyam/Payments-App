@@ -20,7 +20,7 @@ export function TransactionCard() {
           key={index}
           className={`mb-1 mt-2 rounded-lg border-2 ${user.contents === transaction.to ? "border-green-500" : "border-red-500"} bg-white p-1 shadow-md`}
         >
-          <div className="sm:flex sm:justify-around">
+          <div className="md:flex md:justify-between">
             <div className="flex p-1">
               <strong className="text-red-500">From:</strong> @
               {transaction.from}
@@ -28,7 +28,7 @@ export function TransactionCard() {
             <div className="flex p-1">
               <strong className="text-green-500">To:</strong> @{transaction.to}
             </div>
-            <div className="flex p-1">
+            <div className="flex py-1">
               <strong className="text-blue-500">Amount:</strong>₹
               {transaction.amount}
             </div>

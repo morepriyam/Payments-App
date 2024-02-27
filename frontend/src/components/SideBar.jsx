@@ -8,6 +8,7 @@ import {
   BanknotesIcon,
   UserPlusIcon,
   CurrencyRupeeIcon,
+  UserIcon,
 } from "@heroicons/react/24/solid";
 import {
   BackwardIcon,
@@ -73,7 +74,20 @@ export function Sidebar() {
       </ul>
       <div className="mt-4 border-t border-slate-300">
         <div
-          className="mt-4 flex cursor-pointer items-center  rounded-full px-2 py-3 hover:bg-blue-100"
+          className="mt-4 flex cursor-pointer items-center  rounded-full px-2 py-3 hover:bg-blue-50"
+          onClick={() => {
+            navigate("/profile");
+          }}
+        >
+          <UserIcon className="h-6 w-6 text-blue-500 " />
+          <span
+            className={`ml-3 ${!open && "hidden"} font-medium text-zinc-800 duration-100`}
+          >
+            Profile
+          </span>
+        </div>
+        <div
+          className="flex cursor-pointer items-center  rounded-full px-2 py-3 hover:bg-blue-50"
           onClick={() => {
             localStorage.removeItem("token");
             setAuth("");

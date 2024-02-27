@@ -58,7 +58,7 @@ npm run dev
     - Searches for users whose first name, last name, or username matches the provided filter using regex.
     - Returns an array of user objects containing their username, first name, last name, image url and user ID.
 
-- `/addfriend`: test-p
+- `/addfriend`:
     - Allows authenticated users to add other users as friends.
     - Adds the specified user to the current user's list of friends if the user exists.
     - Returns a success message upon successfully adding the friend.
@@ -69,7 +69,7 @@ npm run dev
     - If both friends have added each other, displays their email and phone number.
     - Otherwise, displays only basic information such as username, first name, last name, and image URL.
 
-- `/receivedfriendrequests`: test-p
+- `/receivedfriendrequests`:
     - Allows authenticated users to receive friend requests
 
 

@@ -19,7 +19,7 @@ export function AddMoney() {
     return <div>Loading...</div>;
   }
   return (
-    <div className="w-full rounded-lg border border-blue-500 bg-white p-2 shadow-md">
+    <div className="w-full rounded-lg bg-white p-2 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
       <InputBox
         label={"Deposit"}
         placeholder={"₹5000 max"}

@@ -7,6 +7,7 @@ import { Landing } from "./pages/Landing";
 import { RecoilRoot } from "recoil";
 import { Transactions } from "./pages/Transactions";
 import { Friends } from "./pages/Friends";
+import { Profile } from "./pages/Profile";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
             <Route path="/send" element={<SendMoney />} />
             <Route path="/friends" element={<Friends />} />
             <Route path="/transactions" element={<Transactions />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </BrowserRouter>
       </RecoilRoot>

@@ -31,9 +31,45 @@ export const friends = atom({
           throw new Error("Failed to fetch friends");
         }
 
-        return response.data.friends;
+        return response.data;
       } catch (error) {
         throw new Error(`Error fetching friends: ${error.message}`);
+      }
+    },
+  }),
+});
+
+export const friendRequests = atom({
+  key: "friendRequests",
+  default: selector({
+    key: "fetchRequests",
+    get: async ({ get }) => {
+      const token = get(tokenState);
+
+      if (!token) {
+        throw new Error("No token available");
+      }
+
+      const Authorization = `Bearer ${token}`;
+
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/user/receivedfriendrequests",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization,
+            },
+          },
+        );
+
+        if (response.status !== 200) {
+          throw new Error("Failed to fetch friendsReqs");
+        }
+
+        return response.data.friendRequests;
+      } catch (error) {
+        throw new Error(`Error fetching friendsReqs: ${error.message}`);
       }
     },
   }),

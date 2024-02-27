@@ -10,9 +10,9 @@ export function Balance() {
     return <div>Loading...</div>;
   }
   return (
-    <div className="flex w-full flex-col justify-center gap-3 rounded-lg border border-blue-500 bg-white shadow-md">
+    <div className="flex w-full flex-col justify-center gap-3 rounded-lg  bg-white shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
       <div className="px-2 tracking-wide  text-blue-500">@{user.contents}</div>
-      <div className="px-2 text-sm font-bold tracking-wide text-zinc-800">
+      <div className="px-2 text-sm  font-light tracking-wide text-zinc-800">
         Balance
       </div>
 

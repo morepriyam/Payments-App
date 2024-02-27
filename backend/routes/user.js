@@ -247,7 +247,9 @@ router.get("/friends", authMiddleware, async (req, res) => {
   try {
     const currentUser = await User.findOne({ _id: req.userId });
     const friends = await User.find({ _id: { $in: currentUser.friends } });
-    const populatedFriends = await Promise.all(
+    const myFriends = [];
+    const friendsIAdded = [];
+    await Promise.all(
       friends.map(async (friend) => {
         const isFriend = friend.friends.includes(req.userId);
         let fieldsToSelect;
@@ -256,10 +258,18 @@ router.get("/friends", authMiddleware, async (req, res) => {
         } else {
           fieldsToSelect = "username firstName lastName imageURL -_id";
         }
-        return await User.findOne({ _id: friend._id }).select(fieldsToSelect);
+        const friendData = await User.findOne({ _id: friend._id }).select(
+          fieldsToSelect
+        );
+        if (isFriend) {
+          myFriends.push(friendData);
+        } else {
+          friendsIAdded.push(friendData);
+        }
+        return friendData;
       })
     );
-    return res.status(200).json({ friends: populatedFriends });
+    return res.status(200).json({ myFriends, friendsIAdded });
   } catch (error) {
     return res.status(500).json({ message: "Cannot Get" });
   }
@@ -268,8 +278,10 @@ router.get("/friends", authMiddleware, async (req, res) => {
 router.get("/receivedfriendrequests", authMiddleware, async (req, res) => {
   try {
     const usersWithFriend = await User.find({ friends: req.userId });
+    const me = await User.findOne({ _id: req.userId });
+
     const removeExistingFriends = usersWithFriend.filter(
-      (user) => !user.friends.includes(req.userId)
+      (user) => !me.friends.includes(user._id)
     );
     const friendRequests = removeExistingFriends.map((user) => ({
       username: user.username,

@@ -4,10 +4,9 @@ import { Appbar } from "../components/Appbar";
 import { Balance } from "../components/Balance";
 import { useAuth } from "../hooks/useAuth";
 import { AddMoney } from "../components/AddMoney";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { CurrencyRupeeIcon, UserPlusIcon } from "@heroicons/react/24/outline";
+import { User } from "../components/User";
 
 export function Dashboard() {
   const authLoadable = useAuth();
@@ -50,7 +49,7 @@ export function Dashboard() {
               }}
               type="text"
               placeholder="Search users..."
-              className="w-full rounded border p-2 text-gray-700 focus:border-blue-500 focus:outline-none"
+              className="w-full rounded border p-2 text-gray-700 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] focus:border-blue-500 focus:outline-none"
             ></input>
             {users.map((user) => (
               <User key={user.username} user={user} />
@@ -60,52 +59,5 @@ export function Dashboard() {
       </div>
       <Footer />
     </>
-  );
-}
-
-function User({ user }) {
-  const navigate = useNavigate();
-
-  return (
-    <div className="mt-2 flex justify-between rounded-md border border-green-500 bg-white p-1">
-      <div className="flex items-center">
-        <img src={user.imageURL} className="flex h-7 w-7 rounded-full" />
-
-        <div className="pl-3 text-blue-500">@{user.username}</div>
-        <div className="pl-3 text-green-500">
-          {user.firstName} {user.lastName}
-        </div>
-      </div>
-      <div className="flex gap-2">
-        <button
-          className="flex w-10 items-center justify-center rounded-md bg-blue-600 p-1 text-white"
-          onClick={() => {
-            const token = localStorage.getItem("token");
-            const Authorization = `Bearer ${token}`;
-            axios.post(
-              "http://localhost:3000/api/v1/user/addfriend",
-              { username: user.username },
-              {
-                headers: {
-                  Authorization,
-                },
-              },
-            );
-          }}
-          label={"Add Friend"}
-        >
-          <UserPlusIcon className="h-5 w-5" />
-        </button>
-        <button
-          className="flex w-10 items-center justify-center rounded-md bg-blue-600 p-1 text-white"
-          onClick={() => {
-            navigate("/send?username=" + user.username);
-          }}
-          label={"Send Money"}
-        >
-          <CurrencyRupeeIcon className="h-5 w-5" />
-        </button>
-      </div>
-    </div>
   );
 }

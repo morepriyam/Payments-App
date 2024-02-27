@@ -18,7 +18,7 @@ export function TransactionCard() {
       {trans.map((transaction, index) => (
         <div
           key={index}
-          className={`mb-1 mt-2 rounded-lg border-2 ${user.contents === transaction.to ? "border-green-500" : "border-red-500"} bg-white p-1 shadow-md`}
+          className={`mb-1 mt-2 rounded-lg border-2 ${user.contents === transaction.to ? "border-green-300" : "border-red-200"} bg-white p-1 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]`}
         >
           <div className="md:flex md:justify-between">
             <div className="flex p-1">

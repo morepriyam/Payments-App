@@ -1,10 +1,12 @@
+require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const { User, Account, Transaction } = require("../db");
 const zod = require("zod");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { JWT_SECRET } = require("../config");
+const JWT_SECRET = process.env.JWT_SECRET;
+const ADMIN = process.env.ADMIN;
 const { authMiddleware } = require("../middleware");
 
 const signupSchema = zod.object({
@@ -57,7 +59,7 @@ router.post("/signup", async (req, res) => {
       balance: amount,
     });
     await Transaction.create({
-      from: "65d9e5e61e2a68bb9522656b", // system-generated funds
+      from: ADMIN, // system-generated funds
       to: dbUser._id,
       amount: amount,
     });
@@ -100,11 +102,11 @@ router.post("/signin", async (req, res) => {
       if (!user) {
         return res
           .status(401)
-          .json({ message: "Invalid Username / Email / Number" });
+          .json({ message: "Invalid Username / Email / Phone" });
       }
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (!passwordMatch) {
-        return res.status(401).json({ message: "Invalid Credentials" });
+        return res.status(401).json({ message: "Invalid Password" });
       }
       const token = jwt.sign(
         {
@@ -112,7 +114,10 @@ router.post("/signin", async (req, res) => {
         },
         JWT_SECRET
       );
-      return res.json({ token });
+      return res.json({
+        message: "User Logged In",
+        token,
+      });
     } else {
       const user = await User.findOne({ phoneNumber: usernameOrEmailOrNumber });
       if (!user) {
@@ -130,7 +135,10 @@ router.post("/signin", async (req, res) => {
         },
         JWT_SECRET
       );
-      return res.json({ message: "Signin Successfull", token });
+      return res.json({
+        message: "User Signed In",
+        token,
+      });
     }
   } catch (error) {
     return res.status(500).json({ message: "Signin Error" });

@@ -1,8 +1,8 @@
+require("dotenv").config();
 const express = require("express");
 const rootRouter = require("./routes/index");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const port = 3000;
 
 const app = express();
 
@@ -14,8 +14,10 @@ app.use("/api/v1", rootRouter);
 
 async function connectToMongoDB() {
   try {
-    await mongoose.connect("mongodb://localhost:27017/paytm");
-    app.listen(port, () => console.log(`listening port : ${port}`));
+    await mongoose.connect(process.env.DATABASE_URL);
+    app.listen(process.env.PORT, () =>
+      console.log(`listening port : ${process.env.PORT}`)
+    );
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
     process.exit(1);

@@ -1,8 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const { authMiddleware } = require("../middleware");
 const { Account, Transaction } = require("../db");
 const zod = require("zod");
 const router = express.Router();
+const ADMIN = process.env.ADMIN;
 const mongoose = require("mongoose");
 
 router.get("/balance", authMiddleware, async (req, res) => {
@@ -101,7 +103,7 @@ router.post("/deposit", authMiddleware, async (req, res) => {
       userAccount.balance += amount;
       userAccount.save();
       await Transaction.create({
-        from: "65d9e5e61e2a68bb9522656b", // system-generated funds
+        from: ADMIN, // system-generated funds
         to: req.userId,
         amount: amount,
       });

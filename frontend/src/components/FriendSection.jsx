@@ -16,7 +16,7 @@ export function Friendsection() {
       <div>
         <div className="relative px-2 pt-1 font-bold text-blue-500">
           My Friends:
-          <div className="absolute left-[132px] top-[5px] flex">
+          <div className="absolute left-[96px] top-[5px] flex">
             <ArrowPathIcon className="h-5 w-5 cursor-pointer rounded-full hover:bg-blue-100" />
           </div>
         </div>

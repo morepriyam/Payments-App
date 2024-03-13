@@ -4,7 +4,7 @@ export function NavLink({ icon, label, src, open }) {
   const navigate = useNavigate();
   return (
     <div
-      className="flex cursor-pointer items-center rounded-full px-2 py-3 hover:bg-blue-50"
+      className="flex cursor-pointer items-center rounded-2xl px-2 py-3 hover:bg-blue-50"
       onClick={() => navigate(src)}
     >
       <Link to={src}>{icon}</Link>

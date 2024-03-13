@@ -1,5 +1,6 @@
 import { atom, selector } from "recoil";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const tokenState = atom({
   key: "tokenState",
@@ -19,7 +20,7 @@ export const isAuthenticatedState = selector({
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/v1/user/me",
+        `${import.meta.env.VITE_BACKEND_URL}/user/me`,
         {},
         {
           headers: {
@@ -30,6 +31,7 @@ export const isAuthenticatedState = selector({
       );
 
       if (response.status === 200) {
+        toast.info("Welcome To Payments-App");
         return true;
       } else {
         return false;

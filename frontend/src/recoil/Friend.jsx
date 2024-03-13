@@ -2,12 +2,22 @@ import { atom, selector } from "recoil";
 import axios from "axios";
 
 import { tokenState } from "./Auth";
+export const refreshTrigger = atom({
+  key: "refreshTrigger",
+  default: 0,
+});
+
+export const friendReqTrigger = atom({
+  key: "refreshReqTrigger",
+  default: 0,
+});
 
 export const friends = atom({
   key: "friends",
   default: selector({
     key: "fetchFriends",
     get: async ({ get }) => {
+      get(refreshTrigger);
       const token = get(tokenState);
 
       if (!token) {
@@ -18,7 +28,7 @@ export const friends = atom({
 
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/v1/user/friends",
+          `${import.meta.env.VITE_BACKEND_URL}/user/friends`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -44,6 +54,8 @@ export const friendRequests = atom({
   default: selector({
     key: "fetchRequests",
     get: async ({ get }) => {
+      get(refreshTrigger);
+      get(friendReqTrigger);
       const token = get(tokenState);
 
       if (!token) {
@@ -54,7 +66,7 @@ export const friendRequests = atom({
 
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/v1/user/receivedfriendrequests",
+          `${import.meta.env.VITE_BACKEND_URL}/user/receivedfriendrequests`,
           {
             headers: {
               "Content-Type": "application/json",

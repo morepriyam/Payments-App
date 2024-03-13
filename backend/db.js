@@ -7,17 +7,17 @@ const userSchema = new mongoose.Schema({
     unique: true,
     trim: true,
     lowercase: true,
-    maxLength: 30,
+    maxLength: 20,
   },
   firstName: {
     type: String,
     trim: true,
-    maxLength: 50,
+    maxLength: 12,
   },
   lastName: {
     type: String,
     trim: true,
-    maxLength: 50,
+    maxLength: 12,
   },
   email: {
     type: String,
@@ -27,6 +27,7 @@ const userSchema = new mongoose.Schema({
   phoneNumber: {
     type: Number,
     unique: true,
+    maxLength: 10,
   },
   password: {
     type: String,

@@ -3,11 +3,17 @@ import axios from "axios";
 
 import { tokenState } from "./Auth";
 
+export const balRefreshTrigger = atom({
+  key: "balrefreshTrigger",
+  default: 0,
+});
+
 export const balance = atom({
   key: "balance",
   default: selector({
     key: "fetchBalance",
     get: async ({ get }) => {
+      get(balRefreshTrigger);
       const token = get(tokenState);
 
       if (!token) {
@@ -17,7 +23,7 @@ export const balance = atom({
 
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/v1/account/balance",
+          `${import.meta.env.VITE_BACKEND_URL}/account/balance`,
           {
             headers: {
               "Content-Type": "application/json",

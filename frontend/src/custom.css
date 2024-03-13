@@ -13,3 +13,30 @@ input[type="number"] {
   ::-webkit-scrollbar {
     display: none;
   }
+
+  .Toastify__toast {
+    opacity: 0.8 !important;
+  }
+
+  @media (max-width: 640px) {
+    .Toastify__toast {
+      opacity: 0.9 !important;
+    }
+  }
+  
+  .toastBody {
+    font-family: "Open Sans";
+    font-size: 1rem;
+  }
+
+  img {
+    /* Disable right-click context menu */
+    pointer-events: none;
+    /* Prevent image from being draggable */
+    -webkit-user-drag: none;
+    /* Prevent user selection of the image */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }

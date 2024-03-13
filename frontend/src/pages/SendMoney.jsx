@@ -3,12 +3,13 @@ import { Sidebar } from "../components/SideBar";
 import { Appbar } from "../components/Appbar";
 import { useAuth } from "../hooks/useAuth";
 import { TransferMoney } from "../components/TransferMoney";
+import { Loader } from "../components/Loader";
 
 export function SendMoney() {
   const authLoadable = useAuth();
 
   if (authLoadable.state === "loading") {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (
@@ -17,7 +18,7 @@ export function SendMoney() {
         <Sidebar />
         <div className="h-screen flex-1 bg-neutral-100">
           <Appbar />
-          <div className="grid p-2 sm:grid-cols-3">
+          <div className="grid p-2 sm:grid-cols-2">
             <TransferMoney />
           </div>
         </div>

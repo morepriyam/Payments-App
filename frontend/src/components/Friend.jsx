@@ -1,13 +1,18 @@
 import { CurrencyRupeeIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export function Friend({ user }) {
   const navigate = useNavigate();
 
   return (
-    <div className="mt-1 flex justify-between rounded-md border  bg-white  p-1 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
+    <div className="mt-1 flex justify-between rounded-md border  bg-white p-1  shadow-lg hover:bg-blue-50">
       <div className="flex items-center">
-        <img src={user.imageURL} className="flex h-7 w-7 rounded-full" />
+        <img
+          src={user.imageURL}
+          style={{ width: "28px", height: "28px" }}
+          className="flex h-7 w-7 rounded-full"
+        />
 
         <div className="pl-3 text-blue-500">@{user.username}</div>
         <div className="pl-3">
@@ -20,7 +25,9 @@ export function Friend({ user }) {
       <div className="flex gap-2">
         <button
           className=" flex items-center justify-center rounded-md bg-blue-600 p-1 text-white"
-          onClick={() => {}}
+          onClick={() => {
+            toast.info("Feature Coming Soon");
+          }}
           label={"SendMessage"}
         >
           <EnvelopeIcon className="h-5 w-5" />

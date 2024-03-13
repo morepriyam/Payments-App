@@ -12,6 +12,7 @@ import { Card } from "../components/Card";
 import hero from "../assets/app.jpg";
 import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
 import { isAuthenticatedState, tokenState } from "../recoil/Auth";
+import { toast } from "react-toastify";
 
 export function Signup() {
   const [firstName, setFirstName] = useState();
@@ -49,7 +50,7 @@ export function Signup() {
                 label={"Enter your infromation to create an account"}
               />
               <InputBox
-                placeholder="JohnDoe"
+                placeholder="johndoe"
                 label={"Username"}
                 variant="required"
                 onChange={(e) => {
@@ -66,7 +67,7 @@ export function Signup() {
                 }}
               />
               <InputBox
-                placeholder="Password"
+                placeholder="password (min. 5)"
                 label={"Password"}
                 variant={["password", "required"]}
                 onChange={(e) => {
@@ -74,7 +75,7 @@ export function Signup() {
                 }}
               />
               <InputBox
-                placeholder="1234567890"
+                placeholder="phone (max. 10 digits)"
                 variant={["number", "required"]}
                 label={"Phone"}
                 onChange={(e) => {
@@ -82,7 +83,7 @@ export function Signup() {
                 }}
               />
               <InputBox
-                placeholder="John"
+                placeholder="john"
                 label={"First Name"}
                 onChange={(e) => {
                   const sanitizedValue = e.target.value.replace(/\s/g, "");
@@ -90,7 +91,7 @@ export function Signup() {
                 }}
               />
               <InputBox
-                placeholder="Doe"
+                placeholder="doe"
                 label={"Last Name"}
                 onChange={(e) => {
                   const sanitizedValue = e.target.value.replace(/\s/g, "");
@@ -103,7 +104,7 @@ export function Signup() {
                   onClick={async () => {
                     try {
                       const response = await axios.post(
-                        "http://localhost:3000/api/v1/user/signup",
+                        `${import.meta.env.VITE_BACKEND_URL}/user/signup`,
                         {
                           username,
                           email,
@@ -116,12 +117,13 @@ export function Signup() {
                         },
                       );
                       if (response.status === 200) {
+                        toast.success(response.data.message);
                         localStorage.setItem("token", response.data.token);
                         setTokenState(response.data.token);
                         navigate("/dashboard");
                       }
                     } catch (error) {
-                      console.log("error signing up");
+                      toast.error(error.response.data.message);
                     }
                   }}
                 />

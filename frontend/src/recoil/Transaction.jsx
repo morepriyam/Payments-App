@@ -3,11 +3,17 @@ import axios from "axios";
 
 import { tokenState } from "./Auth";
 
+export const refreshTrans = atom({
+  key: "refreshTrans",
+  default: 0,
+});
+
 export const transaction = atom({
   key: "transaction",
   default: selector({
     key: "fetchTransaction",
     get: async ({ get }) => {
+      get(refreshTrans);
       const token = get(tokenState);
 
       if (!token) {
@@ -18,7 +24,7 @@ export const transaction = atom({
 
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/v1/transactions",
+          `${import.meta.env.VITE_BACKEND_URL}/transactions`,
           {
             headers: {
               "Content-Type": "application/json",

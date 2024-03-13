@@ -12,6 +12,7 @@ import { Card } from "../components/Card";
 import hero from "../assets/app.jpg";
 import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
 import { isAuthenticatedState, tokenState } from "../recoil/Auth";
+import { toast } from "react-toastify";
 
 export function Signin() {
   const [usernameOrEmailOrNumber, setUsernameOrEmailOrNumber] = useState();
@@ -44,7 +45,7 @@ export function Signin() {
               <SubHeading label={"Enter your credentials"} />
 
               <InputBox
-                placeholder="Johndoe"
+                placeholder="johndoe"
                 label={"Email/Phone/Username"}
                 onChange={(e) => {
                   const sanitizedValue = e.target.value.replace(/\s/g, "");
@@ -52,7 +53,7 @@ export function Signin() {
                 }}
               />
               <InputBox
-                placeholder="Password"
+                placeholder="password"
                 label={"Password"}
                 variant="password"
                 onChange={(e) => {
@@ -65,7 +66,7 @@ export function Signin() {
                   onClick={async () => {
                     try {
                       const response = await axios.post(
-                        "http://localhost:3000/api/v1/user/signin",
+                        `${import.meta.env.VITE_BACKEND_URL}/user/signin`,
                         {
                           usernameOrEmailOrNumber:
                             usernameOrEmailOrNumber === ""
@@ -76,12 +77,13 @@ export function Signin() {
                       );
 
                       if (response.status === 200) {
+                        toast.success(response.data.message);
                         localStorage.setItem("token", response.data.token);
                         setTokenState(response.data.token);
                         navigate("/dashboard");
                       }
                     } catch (error) {
-                      console.log("error signing in");
+                      toast.error(error.response.data.message);
                     }
                   }}
                 />

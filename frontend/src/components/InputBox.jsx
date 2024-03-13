@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
-export function InputBox({ label, placeholder, onChange, variant = [] }) {
+export function InputBox({
+  label,
+  placeholder,
+  onChange,
+  variant = [],
+  value,
+}) {
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleShowPassword = () => {
@@ -10,7 +16,7 @@ export function InputBox({ label, placeholder, onChange, variant = [] }) {
   const variants = Array.isArray(variant) ? variant : variant.split(" ");
   return (
     <div>
-      <div className="py-1 text-left text-sm font-bold text-zinc-800">
+      <div className="pt-1 text-sm font-bold text-zinc-800">
         {label}{" "}
         {variants.includes("required") && (
           <span className="text-red-500">*</span>
@@ -18,6 +24,7 @@ export function InputBox({ label, placeholder, onChange, variant = [] }) {
       </div>
       <div className="relative">
         <input
+          value={value || ""}
           name="inpput"
           onChange={onChange}
           type={

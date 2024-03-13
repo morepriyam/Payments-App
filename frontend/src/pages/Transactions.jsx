@@ -3,11 +3,12 @@ import { Sidebar } from "../components/SideBar";
 import { Appbar } from "../components/Appbar";
 import { TransactionCard } from "../components/TransactionCard";
 import { useAuth } from "../hooks/useAuth";
+import { Loader } from "../components/Loader";
 export function Transactions() {
   const authLoadable = useAuth();
 
   if (authLoadable.state === "loading") {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (

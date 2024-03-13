@@ -7,6 +7,22 @@ import { AddMoney } from "../components/AddMoney";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { User } from "../components/User";
+import { Loader } from "../components/Loader";
+import { InputBox } from "../components/InputBox";
+
+function shuffle(array) {
+  let currentIndex = array.length,
+    randomIndex;
+  while (currentIndex > 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+  return array;
+}
 
 export function Dashboard() {
   const authLoadable = useAuth();
@@ -17,18 +33,19 @@ export function Dashboard() {
     const token = localStorage.getItem("token");
     const Authorization = `Bearer ${token}`;
     axios
-      .get("http://localhost:3000/api/v1/user/bulk?filter=" + filter, {
+      .get(`${import.meta.env.VITE_BACKEND_URL}/user/bulk?filter=` + filter, {
         headers: {
           Authorization,
         },
       })
       .then((response) => {
-        setUsers(response.data.user);
+        const shuffledUsers = shuffle(response.data.user);
+        setUsers(shuffledUsers.slice(0, 5));
       });
   }, [filter]);
 
   if (authLoadable.state === "loading") {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (
@@ -42,18 +59,17 @@ export function Dashboard() {
             <AddMoney />
           </div>
           <div className="p-2">
-            <input
-              name="input"
+            <InputBox
               onChange={(e) => {
                 setFilter(e.target.value);
               }}
-              type="text"
               placeholder="Search users..."
-              className="w-full rounded border p-2 text-gray-700 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] focus:border-blue-500 focus:outline-none"
-            ></input>
-            {users.map((user) => (
-              <User key={user.username} user={user} />
-            ))}
+            />
+            <div className="mt-2 grid grid-rows-5 rounded-lg border border-blue-100 p-1 shadow-lg ">
+              {users.map((user) => (
+                <User key={user.username} user={user} />
+              ))}
+            </div>
           </div>
         </div>
       </div>

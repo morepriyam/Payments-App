@@ -15,7 +15,7 @@ const signupSchema = zod.object({
   firstName: zod.string().trim().min(1).optional(),
   lastName: zod.string().trim().min(1).optional(),
   email: zod.string().email(),
-  phoneNumber: zod.number().int(),
+  phoneNumber: zod.number().int().max(9999999999),
 });
 
 router.post("/signup", async (req, res) => {
@@ -146,11 +146,12 @@ router.post("/signin", async (req, res) => {
 });
 
 const updateUserSchema = zod.object({
-  password: zod.string().min(5).trim().optional(),
+  password: zod.string().min(5).max(20).optional(),
   firstName: zod.string().min(1).optional(),
   lastName: zod.string().min(1).optional(),
   email: zod.string().email().optional(),
-  phoneNumber: zod.number().int().min(2).max(12).optional(),
+  phoneNumber: zod.number().int().max(9999999999).optional(),
+  imageURL: zod.string().url().optional(),
 });
 
 router.put("/", authMiddleware, async (req, res) => {
@@ -171,7 +172,9 @@ router.put("/", authMiddleware, async (req, res) => {
       message: "Updated Successfully",
     });
   } catch (error) {
-    return res.status(500).json({ message: "Failed To Update" });
+    return res
+      .status(500)
+      .json({ message: "Failed To Update/Input Already Taken" });
   }
 });
 
@@ -238,7 +241,7 @@ router.post("/addfriend", authMiddleware, async (req, res) => {
     const friend = await User.findOne({ username: req.body.username });
     if (friend) {
       if (me.friends.includes(friend._id)) {
-        return res.status(200).json({ message: "Friend already added" });
+        return res.status(200).json({ message: "Friend Already Added" });
       }
       me.friends.push(friend._id);
       await me.save();
@@ -279,7 +282,7 @@ router.get("/friends", authMiddleware, async (req, res) => {
     );
     return res.status(200).json({ myFriends, friendsIAdded });
   } catch (error) {
-    return res.status(500).json({ message: "Cannot Get" });
+    return res.status(500).json({ message: "Cannot Get Friends" });
   }
 });
 

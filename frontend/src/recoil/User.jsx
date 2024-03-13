@@ -18,7 +18,7 @@ export const user = atom({
 
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/v1/user/userInfo",
+          `${import.meta.env.VITE_BACKEND_URL}/user/userInfo`,
           {
             headers: {
               "Content-Type": "application/json",

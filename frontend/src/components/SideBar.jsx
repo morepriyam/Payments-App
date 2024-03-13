@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { tokenState } from "../recoil/Auth";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   ChartPieIcon,
   BanknotesIcon,
@@ -74,7 +75,7 @@ export function Sidebar() {
       </ul>
       <div className="mt-4 border-t border-slate-300">
         <div
-          className="mt-4 flex cursor-pointer items-center  rounded-full px-2 py-3 hover:bg-blue-50"
+          className="mt-4 flex cursor-pointer items-center  rounded-2xl px-2 py-3 hover:bg-blue-50"
           onClick={() => {
             navigate("/profile");
           }}
@@ -87,10 +88,11 @@ export function Sidebar() {
           </span>
         </div>
         <div
-          className="flex cursor-pointer items-center  rounded-full px-2 py-3 hover:bg-blue-50"
+          className="flex cursor-pointer items-center  rounded-2xl px-2 py-3 hover:bg-blue-50"
           onClick={() => {
             localStorage.removeItem("token");
             setAuth("");
+            toast.info("Logged Out");
             navigate("/signin");
           }}
         >

@@ -12,9 +12,11 @@
   "dependencies": {
     "@heroicons/react": "^2.1.1",
     "axios": "^1.6.7",
+    "dotenv": "^16.4.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.0",
+    "react-toastify": "^10.0.4",
     "recoil": "^0.7.7"
   },
   "devDependencies": {

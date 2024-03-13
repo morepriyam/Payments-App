@@ -58,6 +58,12 @@ router.post("/transfer", authMiddleware, async (req, res) => {
       });
     }
 
+    if (toAccount.balance >= 1000000 || toAccount.balance + amount >= 1000000) {
+      await session.abortTransaction();
+      return res.status(400).json({
+        message: "Receiver Reached Max. Balance",
+      });
+    }
     await Account.updateOne(
       { userId: req.userId },
       { $inc: { balance: -amount } }
@@ -109,7 +115,7 @@ router.post("/deposit", authMiddleware, async (req, res) => {
         .status(200)
         .json({ message: "Deposit Done", balance: userAccount.balance });
     } else {
-      return res.status(200).json({ message: "Max-Balance - 1000000" });
+      return res.status(500).json({ message: "Max-Balance - 1000000" });
     }
   } catch (error) {
     return res.status(500).json({ message: "Deposit Failed" });

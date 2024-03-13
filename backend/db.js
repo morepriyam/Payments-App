@@ -61,6 +61,7 @@ const accountSchema = new mongoose.Schema({
     required: true,
     set: (v) => Math.round(v),
     min: 0,
+    max: 1000000,
   },
 });
 

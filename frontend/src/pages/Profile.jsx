@@ -9,11 +9,12 @@ import { Profilecard } from "../components/ProfileCard";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { user } from "../recoil/User";
-import { useRecoilValueLoadable } from "recoil";
+import { user, userRefresh } from "../recoil/User";
+import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
 
 export function Profile() {
   const profile = useRecoilValueLoadable(user);
+  const setRefreshUser = useSetRecoilState(userRefresh);
   const [firstName, setFirstName] = useState();
   const [lastName, setLastName] = useState();
   const [email, setEmail] = useState();
@@ -123,6 +124,7 @@ export function Profile() {
                       );
                       if (response.status === 200) {
                         toast.success(response.data.message);
+                        setRefreshUser((value) => value + 1);
                       }
                     } catch (error) {
                       toast.error(error.response.data.message);

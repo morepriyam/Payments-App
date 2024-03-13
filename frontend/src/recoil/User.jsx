@@ -3,12 +3,18 @@ import axios from "axios";
 
 import { tokenState } from "./Auth";
 
+export const userRefresh = atom({
+  key: "userRefresh",
+  default: 0,
+});
+
 export const user = atom({
   key: "user",
   default: selector({
     key: "fetchUser",
     get: async ({ get }) => {
       const token = get(tokenState);
+      get(userRefresh);
 
       if (!token) {
         throw new Error("No token available");

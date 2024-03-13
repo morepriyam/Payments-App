@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 export function InputBox({
@@ -8,6 +8,14 @@ export function InputBox({
   variant = [],
   value,
 }) {
+  const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    if (value !== undefined) {
+      setInputValue(value);
+    }
+  }, [value]);
+
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleShowPassword = () => {
@@ -24,9 +32,12 @@ export function InputBox({
       </div>
       <div className="relative">
         <input
-          value={value || ""}
+          value={inputValue}
           name="inpput"
-          onChange={onChange}
+          onChange={(e) => {
+            setInputValue(e.target.value);
+            onChange(e);
+          }}
           type={
             variants.includes("number")
               ? "number"

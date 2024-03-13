@@ -12,9 +12,9 @@ const { authMiddleware } = require("../middleware");
 const signupSchema = zod.object({
   username: zod.string().trim().min(1).max(20),
   password: zod.string().min(5).max(20),
-  firstName: zod.string().trim().min(1).optional(),
-  lastName: zod.string().trim().min(1).optional(),
-  email: zod.string().email(),
+  firstName: zod.string().trim().min(1).max(12).optional(),
+  lastName: zod.string().trim().min(1).max(12).optional(),
+  email: zod.string().email().max(20),
   phoneNumber: zod.number().int().max(9999999999),
 });
 
@@ -147,9 +147,9 @@ router.post("/signin", async (req, res) => {
 
 const updateUserSchema = zod.object({
   password: zod.string().min(5).max(20).optional(),
-  firstName: zod.string().min(1).optional(),
-  lastName: zod.string().min(1).optional(),
-  email: zod.string().email().optional(),
+  firstName: zod.string().min(1).max(12).optional(),
+  lastName: zod.string().min(1).max(12).optional(),
+  email: zod.string().email().max(20).optional(),
   phoneNumber: zod.number().int().max(9999999999).optional(),
   imageURL: zod.string().url().optional(),
 });

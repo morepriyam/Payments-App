@@ -88,6 +88,7 @@ const transactionSchema = new mongoose.Schema(
     timestamps: {
       createdAt: "created_at",
     },
+    expireAfterSeconds: 3600,
   }
 );
 

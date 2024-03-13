@@ -23,7 +23,7 @@ router.get("/balance", authMiddleware, async (req, res) => {
 
 const transferSchema = zod.object({
   to: zod.string(),
-  amount: zod.number().int().max(5000),
+  amount: zod.number().int().min(1).max(5000),
 });
 
 router.post("/transfer", authMiddleware, async (req, res) => {
@@ -31,7 +31,7 @@ router.post("/transfer", authMiddleware, async (req, res) => {
   try {
     schemaCheck = transferSchema.safeParse(req.body);
     if (schemaCheck.error) {
-      return res.status(400).json({ message: "Amount Must Be < 5000" });
+      return res.status(400).json({ message: "Amount Must Be < 5000 > 0" });
     }
     session = await mongoose.startSession();
 
@@ -93,7 +93,7 @@ router.post("/transfer", authMiddleware, async (req, res) => {
   }
 });
 
-const depositSchema = zod.number().int().max(5000);
+const depositSchema = zod.number().int().min(1).max(5000);
 
 router.post("/deposit", authMiddleware, async (req, res) => {
   try {

@@ -14,7 +14,7 @@ const signupSchema = zod.object({
   password: zod.string().min(5).max(20),
   firstName: zod.string().trim().min(1).max(12).optional(),
   lastName: zod.string().trim().min(1).max(12).optional(),
-  email: zod.string().email().max(20),
+  email: zod.string().email().max(35),
   phoneNumber: zod.number().int().max(9999999999),
 });
 

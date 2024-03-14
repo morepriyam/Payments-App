@@ -57,7 +57,6 @@ export function TransferMoney() {
   return (
     <div className="w-full rounded-lg bg-white p-2 shadow-lg">
       <InputBox
-        name="input"
         label={"Username"}
         placeholder={"₹1234"}
         value={userName ? `@${userName}` : "@"}
@@ -73,7 +72,7 @@ export function TransferMoney() {
       />
       <div className="flex flex-row justify-center p-2">
         <button
-          className="text-md mt-2 flex h-10 items-center justify-center rounded-full bg-blue-600 px-4 font-medium tracking-wide text-white shadow-sm hover:bg-blue-800"
+          className="text-md mt-2 flex h-10 items-center justify-center rounded-full bg-blue-600 px-4 font-medium tracking-wide text-white shadow-sm hover:bg-blue-800 focus:outline-red-500"
           onClick={async () => {
             const token = localStorage.getItem("token");
             const Authorization = `Bearer ${token}`;

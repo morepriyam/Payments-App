@@ -13,41 +13,48 @@ export function TransactionCard() {
   if (transactions.state === "loading" || user.state === "loading") {
     return (
       <div className="p-2" style={{ maxHeight: "calc(100vh - 59px)" }}>
-        <table className="w-full table-auto rounded-lg border border-gray-200">
-          <thead>
-            <tr className="relative bg-gray-100 text-left">
-              <th className="px-2 py-2 sm:px-4">From</th>
-              <th className="px-2 py-2 sm:px-4">To</th>
-              <th className="px-2 py-2 sm:px-4">Amount</th>
-              <th className="hidden px-2 py-2 sm:block sm:px-4">Date</th>
-              <th className="px-2 py-2 sm:px-4">
-                Time
-                <div className="absolute right-2 top-2 flex">
-                  <ArrowPathIcon className="h-5 w-5 cursor-pointer rounded-full hover:bg-blue-100 " />
-                </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className={`border-b border-gray-200`}>
-              <td className="px-2 py-2 sm:px-4">
-                <TableLoader />
-              </td>
-              <td className="px-2 py-2 sm:px-4">
-                <TableLoader />
-              </td>
-              <td className="px-2 py-2 sm:px-4">
-                <TableLoader />
-              </td>
-              <td className="hidden px-2 py-2 sm:block sm:px-4">
-                <TableLoader />
-              </td>
-              <td className="px-2 py-2 sm:px-4">
-                <TableLoader />
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div className="relative">
+          <table className="w-full table-auto rounded-lg border border-gray-200">
+            <thead>
+              <tr className="bg-gray-200 text-left">
+                <th className="px-2 py-2 text-sm sm:px-4 sm:text-base">From</th>
+                <th className="px-2 py-2 text-sm sm:px-4 sm:text-base">To</th>
+                <th className="px-2 py-2 text-sm sm:px-4 sm:text-base">
+                  Amount
+                </th>
+
+                <th className="px-2 py-2 text-sm sm:px-4 sm:text-base">
+                  Time
+                  <div className="absolute right-2 top-2 flex">
+                    <ArrowPathIcon className="h-5 w-5 cursor-pointer rounded-full hover:bg-blue-100 " />
+                  </div>
+                </th>
+                <th className="hidden px-2 py-2 sm:block sm:px-4 sm:text-base">
+                  Date
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className={`border-b border-gray-200`}>
+                <td className="px-2 py-2 sm:px-4">
+                  <TableLoader />
+                </td>
+                <td className="px-2 py-2 sm:px-4">
+                  <TableLoader />
+                </td>
+                <td className="px-2 py-2 sm:px-4">
+                  <TableLoader />
+                </td>
+                <td className="hidden px-2 py-2 sm:block sm:px-4">
+                  <TableLoader />
+                </td>
+                <td className="px-2 py-2 sm:px-4">
+                  <TableLoader />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }
@@ -56,54 +63,63 @@ export function TransactionCard() {
       className="overflow-auto p-2"
       style={{ maxHeight: "calc(100vh - 59px)" }}
     >
-      <div>
-        Automatically deleting transactions older than 4 hours to save database
-        storage.
+      <div className="px-1 text-sm sm:text-base">
+        Automatically removing transactions older than 4 hours to save storage
+        space.
       </div>
-      <table className="w-full table-auto rounded-lg border border-gray-200 shadow-lg">
-        <thead>
-          <tr className=" relative bg-gray-100 text-left">
-            <th className="px-2 sm:px-4">From</th>
-            <th className="pl-2 pr-3 sm:px-4">To</th>
-            <th className="pr-2 sm:px-4">Amount</th>
-            <th className="hidden py-2 sm:block sm:px-4">Date</th>
-            <th className="py-2 sm:px-4">
-              Time
-              <div className="absolute right-2 top-2 flex">
-                <ArrowPathIcon
-                  className="h-5 w-5 cursor-pointer rounded-full hover:bg-blue-100 "
-                  onClick={() => {
-                    refreshTran((value) => value + 1);
-                    toast.info("Updating Transactions");
-                  }}
-                />
-              </div>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {trans.map((transaction, index) => (
-            <tr
-              key={index}
-              className={`border-b border-gray-200 ${user.contents === transaction.to ? "bg-green-200" : "bg-red-200"} bg-opacity-50 hover:bg-opacity-75`}
-            >
-              <td className="px-2 py-2 text-red-500 sm:px-4">
-                @{transaction.from}
-              </td>
-              <td className="px-2 py-2 text-green-500 sm:px-4">
-                @{transaction.to}
-              </td>
-              <td className=" py-2 text-blue-500 sm:px-4">
-                ₹{transaction.amount}
-              </td>
-              <td className="hidden py-2 sm:block sm:px-4">
-                {transaction.date[0]}
-              </td>
-              <td className="py-2 sm:px-4">{transaction.date[1]}</td>
+      <div className="relative">
+        <table className="w-full table-auto rounded-lg border border-gray-200 shadow-lg">
+          <thead>
+            <tr className="bg-gray-200 text-left">
+              <th className="px-2  text-sm sm:px-4 sm:text-base">From</th>
+              <th className="pl-2 pr-3 text-sm sm:px-4 sm:text-base">To</th>
+              <th className="pr-2 text-sm sm:px-4 sm:text-base">Amount</th>
+              <th className="py-2 text-sm sm:px-4 sm:text-base">
+                Time
+                <div className="absolute right-2 top-2 flex">
+                  <ArrowPathIcon
+                    className="h-5 w-5 cursor-pointer rounded-full hover:bg-blue-100 "
+                    onClick={() => {
+                      refreshTran((value) => value + 1);
+                      toast.info("Updating Transactions");
+                    }}
+                  />
+                </div>
+              </th>
+              <th className="hidden py-2 sm:block sm:px-4">Date</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {trans.map((transaction, index) => (
+              <tr
+                key={index}
+                className={`border-b border-gray-200 ${user.contents === transaction.to ? "bg-green-200" : "bg-red-200"} bg-opacity-50 hover:bg-opacity-75`}
+              >
+                <td className="px-2 py-2 text-sm text-black sm:px-4 sm:text-base md:text-lg">
+                  @{transaction.from}
+                </td>
+                <td className="px-2 py-2 text-sm text-black sm:px-4 sm:text-base md:text-lg">
+                  @{transaction.to}
+                </td>
+                <td className=" py-2 text-sm text-black sm:px-4 sm:text-base md:text-lg">
+                  ₹{transaction.amount}{" "}
+                  <span
+                    className={`${user.contents === transaction.to ? "text-green-600" : "text-red-500"} text-xs font-extrabold sm:text-sm md:text-base`}
+                  >
+                    {user.contents === transaction.to ? "Cr" : "Dr"}
+                  </span>
+                </td>
+                <td className="py-2  text-xs sm:px-4 sm:text-base md:text-lg">
+                  {transaction.date[1]}
+                </td>
+                <td className="hidden py-2 text-sm sm:block sm:px-4 sm:text-base md:text-lg">
+                  {transaction.date[0]}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

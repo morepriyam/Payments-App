@@ -15,10 +15,9 @@ export function Landing() {
               Payments-App
             </div>
             <p className="mx-auto font-semibold  text-slate-500 md:text-xl/relaxed lg:text-xl/relaxed xl:text-xl/relaxed">
-              Payments-App is a comprehensive financial management and social
-              networking platform that enables users to handle transactions,
-              connect with friends, and stay organized in one convenient
-              location.
+              Payments-App: Seamlessly manage transactions, transfer funds
+              securely, and connect with friends effortlessly in one intuitive
+              platform.
             </p>
           </div>
 

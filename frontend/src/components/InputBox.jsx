@@ -33,7 +33,8 @@ export function InputBox({
       <div className="relative">
         <input
           value={inputValue}
-          name="inpput"
+          name="input"
+          aria-label="input"
           onChange={(e) => {
             setInputValue(e.target.value);
             onChange(e);
@@ -46,10 +47,12 @@ export function InputBox({
                 : "text"
           }
           placeholder={placeholder}
-          className="w-full rounded-md border px-3 py-2 text-gray-700 focus:border-blue-500 focus:outline-none "
+          className="w-full rounded-md border px-3 py-2 text-gray-700 hover:border-blue-500 focus:border-blue-500 focus:outline-none "
         />
         {variant.includes("password") && (
           <button
+            name="showpassword"
+            aria-label="Show Password"
             className="absolute inset-y-0 right-0 flex items-center px-2 focus:outline-none"
             onClick={toggleShowPassword}
           >

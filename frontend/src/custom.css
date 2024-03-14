@@ -30,13 +30,16 @@ input[type="number"] {
   }
 
   img {
-    /* Disable right-click context menu */
     pointer-events: none;
-    /* Prevent image from being draggable */
     -webkit-user-drag: none;
-    /* Prevent user selection of the image */
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+  }
+
+  img {
+    image-rendering: auto;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
   }

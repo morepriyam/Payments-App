@@ -9,7 +9,7 @@ import { GoBackButton } from "../components/GoBackButton";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Card } from "../components/Card";
-import hero from "../assets/app.jpg";
+import hero from "../assets/app.png";
 import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
 import { isAuthenticatedState, tokenState } from "../recoil/Auth";
 import { toast } from "react-toastify";

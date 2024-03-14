@@ -1,5 +1,7 @@
 ## Payments-App 
 
+#### Seamlessly manage transactions, transfer funds securely, and connect with friends effortlessly in one intuitive platform.
+
 #### [paymentsapp-priyam.vercel.app](https://paymentsapp-priyam.vercel.app)
 
 ##### Configure .env in /backend
@@ -103,13 +105,26 @@ npm run dev
 
 
 ### Pending Features 
-- `Friends can message each other` 🫂: Pending
+- `Landing Page needs to me more preety`:Pending
+- `My friends component`:Pending
+- `More Money Related Features`: Pending
+- `Friends can message each other` 🫂: Pending - Postponed
     - Allow authenticated friends to text each other.
     - Message Notifications
+
 
 ### Frontend
 - `SignUp,SignIn and Landing Page`✅
 - `Transactions Page`✅
 - `SendMoney Page`✅
-- `Dashboard Page` -Pending
-- `Friends Page` -Pending
+- `Dashboard Page`✅
+- `Friends Page` ✅
+- `Profile Page` ✅
+
+### Optimization 
+
+- `Performance` 💯
+- `Accessibility` 💯
+- `Best Practices` 💯
+- `SEO` 💯
+- `Progressive Web App` 💯

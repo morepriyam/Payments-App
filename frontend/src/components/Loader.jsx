@@ -1,6 +1,6 @@
 export function Loader() {
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div className="flex h-[100dvh] items-center justify-center">
       <div role="status">
         <svg
           aria-hidden="true"

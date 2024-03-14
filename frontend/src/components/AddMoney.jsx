@@ -32,7 +32,7 @@ export function AddMoney() {
         />
         <div className="flex flex-row justify-center p-2">
           <button
-            className="text-md  flex h-10 items-center justify-center rounded-full bg-blue-600 px-8 font-medium tracking-wide text-white shadow-sm hover:bg-blue-800"
+            className="text-md  flex h-10 items-center justify-center rounded-full bg-blue-600 px-8 font-medium tracking-wide text-white shadow-sm hover:bg-blue-800 focus:outline-red-500"
             onClick={async () => {
               const token = localStorage.getItem("token");
               const Authorization = `Bearer ${token}`;

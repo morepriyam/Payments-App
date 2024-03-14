@@ -28,7 +28,7 @@ export function Balance() {
         <div className="px-2 text-sm font-normal tracking-wide text-zinc-800">
           Username:
         </div>
-        <div className="px-2 tracking-wide  text-blue-500">
+        <div className="px-2 tracking-wide text-blue-700 hover:text-blue-500">
           @{user.contents}
         </div>
       </div>

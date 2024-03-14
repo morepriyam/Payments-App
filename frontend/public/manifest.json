@@ -1,0 +1,39 @@
+{
+    "name": "Payments-App",
+    "short_name": "Pay-App",
+    "start_url": "/",
+    "display": "standalone",
+    "theme_color": "#3b82f6",
+    "background_color": "#ffffff",
+    "icons": [
+      {
+        "src": "/app.svg",
+        "sizes": "150x150",
+        "type": "image/svg+xml"
+      },
+      {
+        "src": "/assets/friend.svg",
+        "sizes": "811x540",
+        "type": "image/svg+xml"
+      },
+      {
+        "src": "/assets/message.svg",
+        "sizes": "824x597",
+        "type": "image/svg+xml"
+      },
+      {
+        "src": "/assets/transaction.svg",
+        "sizes": "1920x1080",
+        "type": "image/svg+xml"
+      },
+      {
+        "src": "/assets/app.png",
+        "purpose": "maskable",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "splash_screen": {
+    "background_color": "#ffffff"
+  }
+  }

@@ -16,7 +16,7 @@ export function SendMoney() {
     <>
       <div className="flex">
         <Sidebar />
-        <div className="h-screen flex-1 bg-neutral-100">
+        <div className="h-[100dvh] flex-1 bg-neutral-100">
           <Appbar />
           <div className="grid p-2 sm:grid-cols-2">
             <TransferMoney />

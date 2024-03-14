@@ -35,29 +35,29 @@ export function Friendrequest() {
   }
 
   return (
-    <div className="">
+    <div>
       {friendReq.contents.map((user) => (
-        <div
-          key={user.username}
-          className="overflow-y-auto"
-          style={{ maxHeight: "calc(100vh - 59px)" }}
-        >
+        <div key={user.username} style={{ maxHeight: "calc(100vh - 59px)" }}>
           <div className="my-1 flex justify-between rounded-md border  bg-white  p-1 shadow-lg hover:bg-blue-50">
             <div className="flex items-center">
               <img
                 src={user.imageURL}
                 className="flex h-7 w-7 rounded-full"
                 style={{ width: "28px", height: "28px" }}
+                alt="Profile Image"
               />
 
-              <div className="pl-3 text-blue-500">@{user.username}</div>
-              <div className="pl-3">
+              <div className="pl-3 text-sm text-blue-700 hover:text-blue-500 sm:text-lg md:text-xl">
+                @{user.username}
+              </div>
+              <div className="text-nowrap pl-3 text-xs text-orange-700 hover:text-orange-500 sm:text-sm md:text-lg">
                 {user.firstName} {user.lastName}
               </div>
             </div>
             <div className="flex gap-2">
               <button
-                className=" flex items-center justify-center rounded-md bg-blue-600 p-1 text-white"
+                aria-label="Add Friend"
+                className=" flex items-center justify-center rounded-md bg-blue-600 p-1 text-white hover:bg-blue-500 focus:outline-red-500"
                 onClick={async () => {
                   try {
                     const token = localStorage.getItem("token");
@@ -84,7 +84,8 @@ export function Friendrequest() {
                 <UserPlusIcon className="h-5 w-5" />
               </button>
               <button
-                className="flex items-center justify-center rounded-md bg-green-500 p-1 text-white"
+                aria-label="Send Money"
+                className="flex items-center justify-center rounded-md bg-green-600 p-1 text-white hover:bg-green-500 focus:outline-red-500"
                 onClick={() => {
                   navigate("/send?username=" + user.username);
                 }}

@@ -37,6 +37,7 @@ export const isAuthenticatedState = selector({
         return false;
       }
     } catch (error) {
+      toast.info("Authentication Failed");
       return false;
     }
   },

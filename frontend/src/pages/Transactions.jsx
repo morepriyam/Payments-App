@@ -15,7 +15,7 @@ export function Transactions() {
     <>
       <div className="flex">
         <Sidebar />
-        <div className="h-screen flex-1 bg-neutral-100">
+        <div className="h-[100dvh] flex-1 bg-neutral-100">
           <Appbar />
           <TransactionCard />
         </div>

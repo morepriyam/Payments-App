@@ -14,19 +14,19 @@ export function Friendsection() {
   if (friend.state === "loading") {
     return (
       <div>
-        <div className="relative px-2 pt-1 font-bold text-blue-500">
+        <div className="relative px-2 pt-1 font-bold text-blue-700 hover:text-blue-500">
           My Friends:
           <div className="absolute left-[96px] top-[5px] flex">
             <ArrowPathIcon className="h-5 w-5 cursor-pointer rounded-full hover:bg-blue-100" />
           </div>
         </div>
-        <div className="relative px-2 pt-1 font-bold text-blue-500">
+        <div className="relative px-2 pt-1 font-bold text-blue-700 hover:text-blue-500">
           Friend Requests:
           <div className="absolute left-[132px] top-[5px] flex">
             <ArrowPathIcon className="h-5 w-5 cursor-pointer rounded-full hover:bg-blue-100" />
           </div>
         </div>
-        <div className="px-2 pt-1 font-bold text-blue-500">
+        <div className="px-2 pt-1 font-bold text-blue-700 hover:text-blue-500">
           Sent Friend Requests:
         </div>
       </div>
@@ -35,11 +35,11 @@ export function Friendsection() {
 
   return (
     <div>
-      <div className="relative px-2 pt-1 font-bold text-blue-500">
+      <div className="relative px-2 pt-1 font-bold text-blue-700 hover:text-blue-500">
         My Friends:
         <div className="absolute left-[96px] top-[4px] flex">
           <ArrowPathIcon
-            className="h-5 w-5 cursor-pointer rounded-full hover:bg-gray-50 "
+            className="h-5 w-5 cursor-pointer rounded-full text-black hover:bg-blue-100 "
             onClick={() => {
               refresh1((value) => value + 1);
               toast.info("Updating Friends");
@@ -47,15 +47,17 @@ export function Friendsection() {
           />
         </div>
       </div>
-      {friend.contents.myFriends.map((user) => (
-        <Friend key={user.username} user={user} />
-      ))}
+      <div className="mt-1 rounded-lg border border-blue-100 p-1 shadow-lg">
+        {friend.contents.myFriends.map((user) => (
+          <Friend key={user.username} user={user} />
+        ))}
+      </div>
 
-      <div className="relative px-2 pt-1 font-bold text-blue-500">
+      <div className="relative px-2 pt-1 font-bold text-blue-700 hover:text-blue-500">
         Friend Requests:
-        <div className="absolute left-[132px] top-[5px] flex">
+        <div className="absolute left-[132px] top-[1px] mt-1 flex">
           <ArrowPathIcon
-            className="h-5 w-5 cursor-pointer rounded-full hover:bg-gray-50 "
+            className="h-5 w-5 cursor-pointer rounded-full text-black hover:bg-blue-100"
             onClick={() => {
               refresh((value) => value + 1);
               toast.info("Updating Friend Requests");
@@ -63,13 +65,17 @@ export function Friendsection() {
           />
         </div>
       </div>
-      <Friendrequest />
-      <div className="px-2 pt-1 font-bold text-blue-500">
+      <div className="rounded-lg border border-blue-100 p-1 shadow-lg">
+        <Friendrequest />
+      </div>
+      <div className="px-2 pt-1 font-bold text-blue-700 hover:text-blue-500">
         Sent Friend Requests:
       </div>
-      {friend.contents.friendsIAdded.map((user) => (
-        <Friendsadded key={user.username} user={user} />
-      ))}
+      <div className="mt-1 rounded-lg border border-blue-100 p-1 shadow-lg">
+        {friend.contents.friendsIAdded.map((user) => (
+          <Friendsadded key={user.username} user={user} />
+        ))}
+      </div>
     </div>
   );
 }

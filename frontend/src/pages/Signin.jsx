@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { GoBackButton } from "../components/GoBackButton";
 import { Card } from "../components/Card";
-import hero from "../assets/app.jpg";
+import hero from "../assets/app.png";
 import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
 import { isAuthenticatedState, tokenState } from "../recoil/Auth";
 import { toast } from "react-toastify";

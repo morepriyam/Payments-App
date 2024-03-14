@@ -2,10 +2,11 @@ import { Link } from "react-router-dom";
 
 export function Footer() {
   return (
-    <footer className="body-font relative z-30 w-full border-t border-zinc-300 bg-white text-zinc-800 ">
+    <footer className="relative bottom-0 hidden w-full border-t border-zinc-300 bg-white text-zinc-800 sm:block ">
+      <div className="absolute bottom-0 h-2 w-full bg-blue-500"></div>
       <div className="container px-8 py-10">
         <div className="grid items-center justify-between gap-4 md:grid-cols-[1fr_auto]">
-          <p className="text-sm tracking-wider text-slate-500 opacity-50">
+          <p className="text-sm tracking-wider text-slate-500">
             © 2024 Payments-App All rights reserved
           </p>
           <div className="flex items-center gap-4 md:order-first md:gap-8">
@@ -22,6 +23,7 @@ export function Footer() {
               <Link
                 className="hover:underline"
                 to={"https://github.com/morepriyam/Payments-App/commits/main/"}
+                aria-label="Commits on Github"
                 target={"_blank"}
               >
                 Commits
@@ -32,6 +34,7 @@ export function Footer() {
                 className="inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-blue-300 hover:text-white"
                 to={"https://twitter.com/Priyamrm"}
                 target={"_blank"}
+                aria-label="Twitter"
               >
                 <TwitterIcon className="h-4 w-4" />
               </Link>
@@ -39,6 +42,7 @@ export function Footer() {
                 className="inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-red-200"
                 to={"https://github.com/morepriyam/Payments-App.git"}
                 target={"_blank"}
+                aria-label="Github Repository"
               >
                 <GithubIcon className="h-4 w-4" />
               </Link>

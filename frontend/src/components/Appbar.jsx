@@ -11,7 +11,6 @@ export function Appbar() {
           Payments-App
         </div>
         <div className="loader">
-          {" "}
           <div className="h-10 w-10 rounded-full bg-gray-400"></div>
         </div>
       </div>
@@ -23,9 +22,14 @@ export function Appbar() {
       <div className="text-nowrap text-2xl font-bold tracking-wide text-blue-600 hover:text-blue-500">
         Payments-App
       </div>
-      <Link to={"/profile"}>
+      <Link
+        to={"/profile"}
+        aria-label="Profile Page"
+        className="rounded-full bg-blue-500 p-[1px]"
+      >
         <img
-          className="text-md h-10 rounded-full bg-blue-600 font-medium tracking-widest text-white shadow-sm hover:bg-blue-700"
+          alt="user image"
+          className="text-md h-10 rounded-full bg-white p-[2px] font-medium tracking-widest text-white shadow-sm"
           src={profile.contents}
           style={{ width: "40px", height: "40px" }}
         />

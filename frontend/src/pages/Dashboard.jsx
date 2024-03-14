@@ -50,30 +50,32 @@ export function Dashboard() {
 
   return (
     <>
-      <div className="flex">
-        <Sidebar />
-        <div className="h-screen flex-1 bg-neutral-100">
-          <Appbar />
-          <div className="grid grid-cols-2 gap-4 p-2 md:grid-cols-3">
-            <Balance />
-            <AddMoney />
-          </div>
-          <div className="p-2">
-            <InputBox
-              onChange={(e) => {
-                setFilter(e.target.value);
-              }}
-              placeholder="Search users..."
-            />
-            <div className="mt-2 grid grid-rows-5 rounded-lg border border-blue-100 p-1 shadow-lg ">
-              {users.map((user) => (
-                <User key={user.username} user={user} />
-              ))}
+      <div className="relative">
+        <div className="flex">
+          <Sidebar />
+          <div className="h-[100dvh] flex-1 bg-neutral-100">
+            <Appbar />
+            <div className="grid grid-cols-2 gap-4 p-2 md:grid-cols-3">
+              <Balance />
+              <AddMoney />
+            </div>
+            <div className="p-2">
+              <InputBox
+                onChange={(e) => {
+                  setFilter(e.target.value);
+                }}
+                placeholder="Search users..."
+              />
+              <div className="mt-2 grid grid-rows-5 rounded-lg border border-blue-100 p-1 shadow-lg ">
+                {users.map((user) => (
+                  <User key={user.username} user={user} />
+                ))}
+              </div>
             </div>
           </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 }

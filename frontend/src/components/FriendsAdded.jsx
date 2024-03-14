@@ -5,34 +5,33 @@ export function Friendsadded({ user }) {
   const navigate = useNavigate();
 
   return (
-    <div
-      className="overflow-y-auto"
-      style={{ maxHeight: "calc(100vh - 59px)" }}
-    >
-      <div className="mt-1 flex justify-between rounded-md border  bg-white  p-1 shadow-lg hover:bg-blue-50">
-        <div className="flex items-center">
-          <img
-            src={user.imageURL}
-            className="flex h-7 w-7 rounded-full"
-            style={{ width: "28px", height: "28px" }}
-          />
+    <div className="my-1 flex justify-between rounded-md border  bg-white  p-1 shadow-lg hover:bg-blue-50">
+      <div className="flex items-center">
+        <img
+          src={user.imageURL}
+          className="flex h-7 w-7 rounded-full"
+          style={{ width: "28px", height: "28px" }}
+          alt="Profile Image"
+        />
 
-          <div className="pl-3 text-blue-500">@{user.username}</div>
-          <div className="pl-3">
-            {user.firstName} {user.lastName}
-          </div>
+        <div className="pl-3 text-sm text-blue-700 hover:text-blue-500 sm:text-lg md:text-xl">
+          @{user.username}
         </div>
-        <div>
-          <button
-            className="flex items-center justify-center rounded-md bg-green-500 p-1 text-white"
-            onClick={() => {
-              navigate("/send?username=" + user.username);
-            }}
-            label={"Send Money"}
-          >
-            <CurrencyRupeeIcon className="h-5 w-5" />
-          </button>
+        <div className="text-nowrap pl-3 text-xs text-orange-700 hover:text-orange-500 sm:text-sm md:text-lg">
+          {user.firstName} {user.lastName}
         </div>
+      </div>
+      <div>
+        <button
+          aria-label="Send Money"
+          className="flex items-center justify-center rounded-md bg-green-600 p-1 text-white hover:bg-green-500 focus:outline-red-500"
+          onClick={() => {
+            navigate("/send?username=" + user.username);
+          }}
+          label={"Send Money"}
+        >
+          <CurrencyRupeeIcon className="h-5 w-5" />
+        </button>
       </div>
     </div>
   );

@@ -56,6 +56,10 @@ export function TransactionCard() {
       className="overflow-auto p-2"
       style={{ maxHeight: "calc(100vh - 59px)" }}
     >
+      <div>
+        Automatically deleting transactions older than 4 hours to save database
+        storage.
+      </div>
       <table className="w-full table-auto rounded-lg border border-gray-200 shadow-lg">
         <thead>
           <tr className=" relative bg-gray-100 text-left">

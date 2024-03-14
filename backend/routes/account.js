@@ -31,7 +31,7 @@ router.post("/transfer", authMiddleware, async (req, res) => {
   try {
     schemaCheck = transferSchema.safeParse(req.body);
     if (schemaCheck.error) {
-      return res.status(400).json({ message: "Amount Must Be < 5000 > 0" });
+      return res.status(400).json({ message: "amount(int.) < 5000 > 0" });
     }
     session = await mongoose.startSession();
 
@@ -100,7 +100,7 @@ router.post("/deposit", authMiddleware, async (req, res) => {
     const { amount } = req.body;
     const isNumber = depositSchema.safeParse(amount);
     if (isNumber.error) {
-      return res.status(400).json({ message: "Amount Must Be < 5000" });
+      return res.status(400).json({ message: "amount(int.) < 5000 > 0" });
     }
     const userAccount = await Account.findOne({ userId: req.userId });
     if (userAccount.balance <= 1000000) {

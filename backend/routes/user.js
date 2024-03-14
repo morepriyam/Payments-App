@@ -162,6 +162,11 @@ router.put("/", authMiddleware, async (req, res) => {
         message: "Error while updating Information / Wrong Inputs",
       });
     }
+    if (req.body.password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(req.body.password, salt);
+      success.data.password = hashedPassword;
+    }
     await User.updateOne(
       {
         _id: req.userId,

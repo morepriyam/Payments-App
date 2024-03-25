@@ -105,7 +105,7 @@ router.post("/deposit", authMiddleware, async (req, res) => {
     const userAccount = await Account.findOne({ userId: req.userId });
     if (userAccount.balance <= 1000000) {
       userAccount.balance += amount;
-      userAccount.save();
+      await userAccount.save();
       await Transaction.create({
         from: ADMIN, // system-generated funds
         to: req.userId,

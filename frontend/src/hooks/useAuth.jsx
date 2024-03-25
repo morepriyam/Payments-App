@@ -9,6 +9,7 @@ export function useAuth() {
 
   useEffect(() => {
     if (authLoadable.state === "hasValue" && !authLoadable.contents) {
+      localStorage.removeItem("token");
       navigate("/signin");
     }
   }, [authLoadable, navigate]);

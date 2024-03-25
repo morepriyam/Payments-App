@@ -4,25 +4,11 @@ import { Appbar } from "../components/Appbar";
 import { Balance } from "../components/Balance";
 import { useAuth } from "../hooks/useAuth";
 import { AddMoney } from "../components/AddMoney";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { User } from "../components/User";
 import { Loader } from "../components/Loader";
 import { InputBox } from "../components/InputBox";
-
-function shuffle(array) {
-  let currentIndex = array.length,
-    randomIndex;
-  while (currentIndex > 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ];
-  }
-  return array;
-}
 
 export function Dashboard() {
   const authLoadable = useAuth();
@@ -39,10 +25,27 @@ export function Dashboard() {
         },
       })
       .then((response) => {
-        const shuffledUsers = shuffle(response.data.user);
+        const shuffledUsers = cachedFn(response.data.user);
         setUsers(shuffledUsers.slice(0, 5));
       });
   }, [filter]);
+
+  const cachedFn = useCallback(
+    (array) => {
+      let currentIndex = array.length,
+        randomIndex;
+      while (currentIndex > 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        [array[currentIndex], array[randomIndex]] = [
+          array[randomIndex],
+          array[currentIndex],
+        ];
+      }
+      return array;
+    },
+    [users, filter],
+  );
 
   if (authLoadable.state === "loading") {
     return <Loader />;

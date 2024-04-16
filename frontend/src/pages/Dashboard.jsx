@@ -16,36 +16,36 @@ export function Dashboard() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const Authorization = `Bearer ${token}`;
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/user/bulk?filter=` + filter, {
-        headers: {
-          Authorization,
-        },
-      })
-      .then((response) => {
-        const shuffledUsers = cachedFn(response.data.user);
-        setUsers(shuffledUsers.slice(0, 5));
-      });
-  }, [filter]);
+    const delayDebounceFn = setTimeout(() => {
+      const token = localStorage.getItem("token");
+      const Authorization = `Bearer ${token}`;
+      axios
+        .get(`${import.meta.env.VITE_BACKEND_URL}/user/bulk?filter=` + filter, {
+          headers: {
+            Authorization,
+          },
+        })
+        .then((response) => {
+          const shuffledUsers = cachedFn(response.data.user);
+          setUsers(shuffledUsers.slice(0, 5));
+        });
+    }, 500); // Adjust the debounce delay
+    return () => clearTimeout(delayDebounceFn);
+  }, [filter, cachedFn]);
 
-  const cachedFn = useCallback(
-    (array) => {
-      let currentIndex = array.length,
-        randomIndex;
-      while (currentIndex > 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-        [array[currentIndex], array[randomIndex]] = [
-          array[randomIndex],
-          array[currentIndex],
-        ];
-      }
-      return array;
-    },
-    [users, filter],
-  );
+  const cachedFn = useCallback((array) => {
+    let currentIndex = array.length,
+      randomIndex;
+    while (currentIndex > 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex],
+        array[currentIndex],
+      ];
+    }
+    return array;
+  }, []);
 
   if (authLoadable.state === "loading") {
     return <Loader />;
